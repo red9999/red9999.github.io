@@ -11,6 +11,8 @@ body{
   font-size: 2em;
   vertical-align: bottom;
   padding-left: 10px;
+  color: #F27457;
+  font-weight: bolder;
 }
 #progressBarBox {
     width: 90%;
