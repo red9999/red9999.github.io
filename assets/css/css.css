@@ -1,0 +1,95 @@
+html {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+body{
+  background-color: #F2F2F2;
+  touch-action: none;
+}
+
+#message{
+  font-size: 2em;
+  vertical-align: bottom;
+  padding-left: 10px;
+}
+#progressBarBox {
+    width: 90%;
+    margin: 10px auto;
+    height: 22px;
+    background-color: #efd0d0;
+  }
+.progressBar {
+    height: 22px;
+    
+    transform-origin: left center;
+  /*   background: linear-gradient(to bottom, red, #900); */
+    background-color: #d05656;
+    animation: roundtime calc(25s) linear forwards;
+  }
+  
+  @keyframes fillAnimation {
+    100% { stroke-dashoffset: 0 }
+  }
+  
+  .animateFill {
+    animation: fillAnimation ease-in forwards; 
+  }
+  
+  .centered {
+    max-height:70vh; 
+    max-width:90vh;
+    margin: 10px auto;
+  }
+  
+  @keyframes roundtime {
+    to {
+      /* More performant than `width` */
+      transform: scaleX(0);
+    }
+  }
+  
+
+.paused{
+    -webkit-animation-play-state:paused;
+    -moz-animation-play-state:paused;
+    -o-animation-play-state:paused; 
+    animation-play-state:paused;
+}
+
+#startBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 95vh;
+}
+
+
+#startButton{
+  display: inline-block;
+  background-color: #F2D785;
+  padding: 15px 40px;
+  border: none;
+  border-radius: 30px;
+
+  font-size: 60px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #F27457;
+  font-weight:bolder;
+
+  box-shadow: 0 3px 0 #F27457;
+  cursor: pointer;
+  transition: all 100ms linear;
+
+}
+#startButton:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 7px 0 #F27457;
+}
+
+#startButton:focus { outline: 0; }
+
+.hidden{
+  visibility:hidden;
+  display:none!important;
+}
