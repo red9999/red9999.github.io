@@ -1,8 +1,9 @@
 console.clear();
 
+const animalList = ["deer", "dog", "frog", "giraffe", "pig", "tiger", "zebra"]
 const touchRadius = 80;
-const svg = d3.select("svg");
-const patternImage = "assets/images/giraffe-s.jpg";
+
+
 
 const numbersDict = {
   0: [
@@ -70,7 +71,7 @@ R: ["M140 -622L140 48",
 S: ["M456 -542C432 -594 379 -632 293 -632C171 -632 109 -557 109 -478C109 -286 476 -316 476 -115C476 -26 404 48 285 48C193 48 123 5 95 -61"],
 T: ["M40 -622L480 -622",
 "M260 -622 L260 48"],
-U: ["M130 -632L130 -197C130 -39 218 48 347 48C482 48 564 -39 564 -197L564 -632"],
+U: ["M130 -632L130 -197C130 -39 218 48 347 48C482 48 564 -39 564 -197L564 -632 L564 48"],
 V: ["M70 -632L319 43L323 43L571 -632"],
 W: ["M80 -632L255 43L259 43L450 -622L454 -622L645 43L649 43L830 -632"],
 X: ["M70 0L516 680",
@@ -136,6 +137,13 @@ const searchParams = new URLSearchParams(window.location.search);
 
 
 function initiateExercise() {
+  const selectedAnimal = animalList[Math.floor(Math.random() * animalList.length)]
+  console.log(selectedAnimal)
+
+  const patternImage = "assets/images/"+selectedAnimal+"-pattern.jpg";
+  const svg = d3.select("svg");
+
+
   document.getElementById("startBox").classList.add('hidden');
   document.getElementById("mainDiv").classList.remove('hidden');
   document.getElementById("header").classList.remove('hidden');
@@ -296,7 +304,7 @@ function initiateExercise() {
     circle = svg
       .append("image")
       .attr("id", "circle")
-      .attr("xlink:href", "assets/images/giraffe-face-b.png")
+      .attr("xlink:href", "assets/images/"+selectedAnimal+"-face.png")
       .attr("width", 140)
       .attr("height", 140)
 
