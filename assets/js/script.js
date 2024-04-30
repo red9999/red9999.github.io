@@ -215,7 +215,7 @@ function initiateExercise() {
 
   svg.attr(
     "viewBox",
-    `${svgbox.x - 80} ${svgbox.y - 65} ${svgbox.width + 150} ${svgbox.height + 150
+    `${svgbox.x - 90} ${svgbox.y - 90} ${svgbox.width + 160} ${svgbox.height + 150
     }`
   );
 

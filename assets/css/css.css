@@ -37,9 +37,9 @@ body{
     animation: fillAnimation ease-in forwards; 
   }
   
-  .centered {
-    max-height:70vh; 
-    max-width:90vh;
+  .viewbox {
+    max-height: calc(100dvh - 120px);
+    max-width:90dvh;
     margin: 10px auto;
   }
   
