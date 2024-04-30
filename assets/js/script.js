@@ -213,32 +213,32 @@ function initiateExercise() {
   }
 
   function animatePath() {
-    // Handle the first iteration separately without a timeout
-    let currentPath = pathList[0];
-    let totalLength = currentPath.node().getTotalLength();
-    let animationDuration = totalLength / 1500;
-    currentPath.style("stroke-dasharray", totalLength);
-    currentPath.style("stroke-dashoffset", totalLength);
-    currentPath.style("animation-duration", animationDuration + "s");
-    currentPath.attr("stroke", "#F2D785");
-    currentPath.attr("class", "animateFill");
-
+    // // Handle the first iteration separately without a timeout
+    // let currentPath = pathList[0];
+    // let totalLength = currentPath.node().getTotalLength();
+    // let animationDuration = totalLength / 1500;
+    // currentPath.style("stroke-dasharray", totalLength);
+    // currentPath.style("stroke-dashoffset", totalLength);
+    // currentPath.style("animation-duration", animationDuration + "s");
+    // currentPath.attr("stroke", "#F2D785");
+    // currentPath.attr("class", "animateFill");
+    let pauseDuration = 0;
     // Use a loop for the remaining iterations with a timeout
-    for (let i = 1; i < pathList.length; i++) {
+    for (let i = 0; i < pathList.length; i++) {
       let currentPath = pathList[i];
       let totalLength = currentPath.node().getTotalLength();
       let animationDuration = totalLength / 1500;
-      let pauseDuration = pathList[i - 1].node().getTotalLength() / 1500;
+      if (i > 0) {
+        pauseDuration += pathList[i - 1].node().getTotalLength() / 1500;
+    }
       setTimeout(() => {
 
-        currentPath.style("stroke-dasharray", totalLength);
-        currentPath.style("stroke-dashoffset", totalLength);
         currentPath.style("stroke-dasharray", totalLength);
         currentPath.style("stroke-dashoffset", totalLength);
         currentPath.style("animation-duration", animationDuration + "s");
         currentPath.attr("stroke", "#F2D785");
         currentPath.attr("class", "animateFill");
-      }, i * pauseDuration * 1000, i); // Multiply animationDuration by 1000 to convert seconds to milliseconds
+      }, pauseDuration * 1000); // Multiply animationDuration by 1000 to convert seconds to milliseconds
     }
   }
 
@@ -266,7 +266,7 @@ function initiateExercise() {
 
   svg.attr(
     "viewBox",
-    `${svgbox.x - 90} ${svgbox.y - 90} ${svgbox.width + 160} ${svgbox.height + 160
+    `${svgbox.x - 90} ${svgbox.y - 90} ${svgbox.width + 190} ${svgbox.height + 190
     }`
   );
 
@@ -295,7 +295,7 @@ function initiateExercise() {
     lastLength = 0;
 
     circle = createCircle();
-    circle.attr("x", startPoint.x - 70).attr("y", startPoint.y - 70);
+    circle.attr("x", startPoint.x - 90).attr("y", startPoint.y - 90);
     disableDragging()
   }
 
@@ -304,8 +304,8 @@ function initiateExercise() {
       .append("image")
       .attr("id", "circle")
       .attr("xlink:href", "assets/images/"+selectedAnimal+"-face.png")
-      .attr("width", 140)
-      .attr("height", 140)
+      .attr("width", 180)
+      .attr("height", 180)
 
       .on("mouseenter", enableDragging)
       .on("touchstart", enableDragging, { passive: true })
