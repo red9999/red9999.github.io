@@ -180,7 +180,7 @@ function initiateExercise() {
     .append("pattern")
     .attr("id", "pattern")
     .attr("width", 200)
-    .attr("height", 140)
+    .attr("height", 200)
     .attr("patternUnits", "userSpaceOnUse");
 
   pattern.append("image").attr("xlink:href", patternImage);
