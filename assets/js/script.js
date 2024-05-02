@@ -312,13 +312,21 @@ drawHiddenLines();
     var element = document.getElementById("progressBar");
     element.classList.add("paused");
   }
+  var progressbarStarted = false;
+
   function startProgressbar() {
+    if (progressbarStarted) {
+      return; // If progress bar has already started, exit the function
+    }
+    progressbarStarted = true; // Set flag to indicate progress bar has started
     var element = document.getElementById("progressBar");
     element.classList.remove("paused");
-    setTimeout(endTimer, timerDuration*1000);
-
+    console.log(`Start timer ${timerDuration}`)
+    setTimeout(endTimer, timerDuration * 1000);
   }
+  
   function endTimer(){
+    console.log("endTimer")
     var progressBar = document.querySelector('.progressBar');
     progressBar.classList.add("paused");
     progressBar.style.animation = 'none';
@@ -328,7 +336,6 @@ drawHiddenLines();
     document.getElementById('actionMessage').classList.remove('hidden')
     actionBox = document.getElementById("actionBox").classList.remove('hidden');
     document.getElementById("mainDiv").classList.add('hidden');
-    actionBox.innerHTML = "Done!"
   }
 
 
