@@ -1,10 +1,9 @@
 console.clear();
-
+const searchParams = new URLSearchParams(window.location.search);
 const animalList = ["deer", "dog", "frog", "giraffe", "pig", "tiger", "zebra"]
-const touchRadius = 80;
-
-
-
+const touchRadius = 100;
+const circleSize = 180;
+const timerDuration = 60; // in seconds, also to be set in css
 const numbersDict = {
   0: [
     "M310 -632C162 -632 90 -479 90 -289C90 -97 162 48 311 48S532 -97 532 -289C532 -479 460 -632 312 -632",
@@ -82,15 +81,6 @@ Z: ["M110 -622L498 -622L498 -618L111 34L111 38L509 38"]
 
 }
 
-lettersDict = {
- 
-}
-
-const fullDict = {
-  lettersDict: lettersDict,
-  numbersDict: numbersDict,
-}
-
 var audioPlayer = document.getElementById('audioPlayer');
 
 let alphanum_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
@@ -132,24 +122,21 @@ startButton.addEventListener("click", function () {
   initiateExercise(); // Call the function to start the exercise
 });
 
-const searchParams = new URLSearchParams(window.location.search);
+
+
 
 
 function initiateExercise() {
   const selectedAnimal = animalList[Math.floor(Math.random() * animalList.length)]
-  console.log(selectedAnimal)
-
   const patternImage = "assets/images/"+selectedAnimal+"-pattern.jpg";
   const svg = d3.select("svg");
 
-
-  document.getElementById("startBox").classList.add('hidden');
+  document.getElementById("actionBox").classList.add('hidden');
   document.getElementById("mainDiv").classList.remove('hidden');
-  document.getElementById("header").classList.remove('hidden');
-  document.getElementById("svgbox").classList.remove('hidden');
 
   document.getElementById("svgbox").innerHTML = ''
 
+  // Select random key
   const keys = Object.keys(numbersDict);
   let randomKey
   if (searchParams.get('key')){
@@ -158,7 +145,6 @@ function initiateExercise() {
     randomKey = keys[Math.floor(Math.random() * keys.length)];
   }
 
-  // const randomKey = 3; //for testing
   const chosenPath = numbersDict[randomKey];
 
   // Function to load and play the MP3 files sequentially
@@ -168,14 +154,16 @@ function initiateExercise() {
   }
  
   playAudio()
-  // Get the button element
+  // Get assign playAudio to the play button
   var playButton = document.getElementById("playButton");
   playButton.addEventListener("click", function () {
     playAudio();
   });
 
+  // Set the text of the instruction message
   letterElement = document.getElementById("message");
   letterElement.innerHTML = 'Schrijf de ' + randomKey;
+
 
   function playPraise() {
     var selected_string = praise_list[(Math.floor(Math.random() * praise_list.length))]
@@ -186,10 +174,8 @@ function initiateExercise() {
 
   const pathData = chosenPath;
 
+  // define pattern
   const defs = svg.append("defs");
-
-
-
   const pattern = defs
     .append("pattern")
     .attr("id", "pattern")
@@ -199,74 +185,74 @@ function initiateExercise() {
 
   pattern.append("image").attr("xlink:href", patternImage);
 
-  pathList = [];
-  for (let i = 0; i < pathData.length; i++) {
-    newPath = svg
-      .append("path")
+  // Draw path
+const pathList = [];
+const animationDuration = 1500;
+function drawPath() {
+  pathData.forEach((path, i) => {
+    const newPath = svg.append("path")
       .attr("id", "shape" + i)
       .attr("class", "shape")
-      .attr("d", pathData[i])
+      .attr("d", path)
       .attr("stroke", "")
       .attr("stroke-width", "50");
 
     pathList.push(newPath);
-  }
+  });
+}
 
-  function animatePath() {
-    // // Handle the first iteration separately without a timeout
-    // let currentPath = pathList[0];
-    // let totalLength = currentPath.node().getTotalLength();
-    // let animationDuration = totalLength / 1500;
-    // currentPath.style("stroke-dasharray", totalLength);
-    // currentPath.style("stroke-dashoffset", totalLength);
-    // currentPath.style("animation-duration", animationDuration + "s");
-    // currentPath.attr("stroke", "#F2D785");
-    // currentPath.attr("class", "animateFill");
-    let pauseDuration = 0;
-    // Use a loop for the remaining iterations with a timeout
-    for (let i = 0; i < pathList.length; i++) {
-      let currentPath = pathList[i];
-      let totalLength = currentPath.node().getTotalLength();
-      let animationDuration = totalLength / 1500;
-      if (i > 0) {
-        pauseDuration += pathList[i - 1].node().getTotalLength() / 1500;
-    }
-      setTimeout(() => {
+// Animate the drawing of the path
+function animatePath() {
+  let cumulativeDuration = 0;
+  const animationSpeed = 2000; // Aanimation speed
 
-        currentPath.style("stroke-dasharray", totalLength);
-        currentPath.style("stroke-dashoffset", totalLength);
-        currentPath.style("animation-duration", animationDuration + "s");
-        currentPath.attr("stroke", "#F2D785");
-        currentPath.attr("class", "animateFill");
-      }, pauseDuration * 1000); // Multiply animationDuration by 1000 to convert seconds to milliseconds
-    }
-  }
+  pathList.forEach((currentPath, i) => {
+    const totalLength = currentPath.node().getTotalLength();
+    const animationDuration = totalLength / animationSpeed;
+    const pauseDuration = i === 0 ? 0 : pathList[i - 1].node().getTotalLength() / animationSpeed;
+    
+    setTimeout(() => {
+      currentPath.style("stroke-dasharray", totalLength);
+      currentPath.style("stroke-dashoffset", totalLength);
+      currentPath.style("animation-duration", animationDuration + "s");
+      currentPath.attr("stroke", "#F2D785");
+      currentPath.attr("class", "animateFill");
+    }, cumulativeDuration * 1000);
+    
+    cumulativeDuration += animationDuration + pauseDuration;
+  });
+}
 
-  animatePath()
 
-  const lineList = [];
-  function drawPath() {
-    for (let i = 0; i < pathData.length; i++) {
-      const newLine = svg
-        .append("path")
-        .attr("id", "line" + i)
-        .attr("fill", "none")
-        .attr("d", pathData[i])
-        .attr("stroke", "url(#pattern)")
-        .attr("stroke-width", "50")
-        .style("display", "none");
-      lineList.push(newLine);
-    }
-  }
+drawPath();
+animatePath();
 
-  drawPath();
+// Draw hidden lines
+const lineList = [];
+
+function drawHiddenLines() {
+  pathData.forEach((path, i) => {
+    const newLine = svg.append("path")
+      .attr("id", "line" + i)
+      .attr("fill", "none")
+      .attr("d", path)
+      .attr("stroke", "url(#pattern)")
+      .attr("stroke-width", "50")
+      .style("display", "none");
+
+    lineList.push(newLine);
+  });
+}
+
+drawHiddenLines();
+
 
   svgbox = svg.node().getBBox();
 
 
   svg.attr(
     "viewBox",
-    `${svgbox.x - 90} ${svgbox.y - 90} ${svgbox.width + 190} ${svgbox.height + 190
+    `${svgbox.x - (circleSize / 2)} ${svgbox.y - (circleSize / 2)} ${svgbox.width + 190} ${svgbox.height + 190
     }`
   );
 
@@ -276,6 +262,7 @@ function initiateExercise() {
   const itr = document.getElementById("itr");
   const message = document.getElementById("message");
   let currentPath = 0;
+  
 
 
   function selectPath() {
@@ -295,23 +282,20 @@ function initiateExercise() {
     lastLength = 0;
 
     circle = createCircle();
-    circle.attr("x", startPoint.x - 90).attr("y", startPoint.y - 90);
+    circle.attr("x", startPoint.x - (circleSize / 2)).attr("y", startPoint.y - (circleSize / 2));
     disableDragging()
   }
 
   function createCircle() {
-    circle = svg
-      .append("image")
+    return svg.append("image")
       .attr("id", "circle")
-      .attr("xlink:href", "assets/images/"+selectedAnimal+"-face.png")
-      .attr("width", 180)
-      .attr("height", 180)
-
+      .attr("xlink:href", "assets/images/" + selectedAnimal + "-face.png")
+      .attr("width", circleSize)
+      .attr("height", circleSize)
       .on("mouseenter", enableDragging)
       .on("touchstart", enableDragging, { passive: true })
       .call(
-        d3
-          .drag()
+        d3.drag()
           .on("start", startProgressbar)
           .on("drag", function (event) {
             if (!draggingEnabled) return;
@@ -319,7 +303,6 @@ function initiateExercise() {
             pointModifier(points, circle);
           })
       );
-    return circle
   }
   selectPath();
 
@@ -332,8 +315,21 @@ function initiateExercise() {
   function startProgressbar() {
     var element = document.getElementById("progressBar");
     element.classList.remove("paused");
-  }
+    setTimeout(endTimer, timerDuration*1000);
 
+  }
+  function endTimer(){
+    var progressBar = document.querySelector('.progressBar');
+    progressBar.classList.add("paused");
+    progressBar.style.animation = 'none';
+    void progressBar.offsetWidth;
+    progressBar.style.animation = null;
+
+    document.getElementById('actionMessage').classList.remove('hidden')
+    actionBox = document.getElementById("actionBox").classList.remove('hidden');
+    document.getElementById("mainDiv").classList.add('hidden');
+    actionBox.innerHTML = "Done!"
+  }
 
 
   function enableDragging() {
@@ -365,10 +361,9 @@ function initiateExercise() {
     if (fillpercentage > 0.98) {
       disableDragging();
       updateLineFill(1);
-      circle.attr("x", fullPoint.x - 70).attr("y", fullPoint.y - 70)
+      circle.attr("x", fullPoint.x - (circleSize / 2)).attr("y", fullPoint.y - (circleSize / 2))
 
       if (currentPath == lineList.length - 1) {
-        pauseProgressbar();
         playPraise();
         circle.on(".drag", null);
         setTimeout(initiateExercise, 2000);
@@ -379,7 +374,7 @@ function initiateExercise() {
       }
     } else {
       updateLineFill(lastLength / pathLength);
-      circle.attr("x", p.point.x - 70).attr("y", p.point.y - 70);
+      circle.attr("x", p.point.x - (circleSize / 2)).attr("y", p.point.y - (circleSize / 2));
     }
   }
   }
