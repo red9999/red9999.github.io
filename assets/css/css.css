@@ -8,6 +8,9 @@ body {
   touch-action: none;
 }
 
+#gameDiv::backdrop {
+    background-color: #f2f2f2;
+}
 
 #circle {
   cursor:pointer;

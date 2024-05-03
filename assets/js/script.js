@@ -133,10 +133,23 @@ window.addEventListener('load', preloadAudio);
 
 var startButton = document.getElementById("startButton");
 
+function openFullscreen() {
+  elem = document.getElementById("gameDiv")
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+
+
 // Add event listener to the button
 startButton.addEventListener("click", function () {
   gameIsActive = true;
-  initiateExercise(); // Call the function to start the exercise
+  openFullscreen()
+  initiateExercise();
 });
 
 
