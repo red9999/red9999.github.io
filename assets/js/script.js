@@ -194,7 +194,7 @@ function initiateExercise() {
   
 
   // define pattern
-  const defs = svg.append("defs");
+  const defs = svgContainer.append("svg").style("height","0").style("width","0").append("defs");
   const pattern = defs
     .append("pattern")
     .attr("id", "pattern")
@@ -249,7 +249,7 @@ function drawPath(pathData, key) {
   });
 }
 
-// Adjust xOffset and yOffset based on the positioning requirements.
+
 
 
 // Animate the drawing of the path
@@ -281,15 +281,22 @@ for (let key = 0; key < randomKey.length; key++){
     animatePath();
 }
 
+
 const groupWidthPercentage = 100 / groupList.length;
+let totalWidth = 0;
+groupList.forEach((group, i) => {
+  totalWidth += group.node().getBBox().width + circleSize+10;
+})
 
 groupList.forEach((group, i) => {
   groupBBox = group.node().getBBox();
   group.attr(
     "viewBox",
-    `0 ${groupBBox.y - (circleSize / 2)} ${groupBBox.width + circleSize+10} ${groupBBox.height + circleSize+10
+    `${groupBBox.x - (circleSize / 2)} ${groupBBox.y - (circleSize / 2)} ${groupBBox.width + circleSize+10} ${groupBBox.height + circleSize+10
     }`);
-  group.style("max-width", `${groupWidthPercentage - 1}%`);
+  widthPercentage = ((groupBBox.width + circleSize+10) / totalWidth)*100
+  console.log(totalWidth)
+  group.style("max-width", `${widthPercentage}%`);
 })
 
   //interaction

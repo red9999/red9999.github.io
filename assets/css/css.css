@@ -51,9 +51,9 @@ body{
   }
   
   .viewbox {
-    max-height: calc(100dvh - 120px);
-    max-width:90dvh;
-    margin: 10px auto;
+    height: calc(100dvh - 120px);
+    /* width:90dvh; */
+    margin: 0 auto;
   }
   
 
@@ -139,8 +139,8 @@ transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
 .svg-container {
-    /* display: flex; */
-    /* justify-content: space-between;  */
+    display: flex;
+    justify-content: space-between; 
     align-items: center; 
 }
 
@@ -152,5 +152,6 @@ transform: translate(-50%, -50%); /* Center horizontally and vertically */
 
 .svg-group {
   display: inline-block;
-  max-height:24vh;
+  max-height: 100%;
 }
+
