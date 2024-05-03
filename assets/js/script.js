@@ -135,6 +135,7 @@ var startButton = document.getElementById("startButton");
 
 // Add event listener to the button
 startButton.addEventListener("click", function () {
+  gameIsActive = true;
   initiateExercise(); // Call the function to start the exercise
 });
 
@@ -146,7 +147,6 @@ let gameIsActive = false;
 let progressbarStarted = false;
 
 function initiateExercise() {
-  gameIsActive = true;
   audioPlayer.onended = null; 
   
   const selectedAnimal = animalList[Math.floor(Math.random() * animalList.length)]
@@ -389,15 +389,8 @@ groupList.forEach((group, i) => {
     var element = document.getElementById("progressBar");
     element.classList.add("paused");
   }
-
+  const progressBarBox = document.getElementById("progressBarBox");
   const flashProgressBar = () => {
-    const progressBarBox = document.getElementById("progressBarBox");
-      progressBarBox.classList.add("flashAnimation");
-  };
-
-
-  const flashProgressBar = () => {
-    const progressBarBox = document.getElementById("progressBarBox");
       progressBarBox.classList.add("flashAnimation");
   };
 
@@ -405,6 +398,7 @@ groupList.forEach((group, i) => {
     if (progressbarStarted) {
       return; // If progress bar has already started, exit the function
     }
+    
     progressbarStarted = true;
     console.log("Start")
     var element = document.getElementById("progressBar");
@@ -424,13 +418,16 @@ groupList.forEach((group, i) => {
   }
 
   function gameEnd(){
+    console.log(gameIsActive)
     overlay.style.display = "none"
     if(gameIsActive){
       initiateExercise();
     } else {
+      progressbarStarted = false;
     document.getElementById('actionMessage').classList.remove('hidden')
     actionBox = document.getElementById("actionBox").classList.remove('hidden');
     document.getElementById("mainDiv").classList.add('hidden');
+    progressBarBox.classList.remove("flashAnimation");
   }
 }
 
