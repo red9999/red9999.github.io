@@ -142,10 +142,11 @@ startButton.addEventListener("click", function () {
 const overlay = document.getElementById("overlayImage")
 
 successImages = ["astronaut", "cat", "cat2", "chicken", "monkey", "pig", "rabbit"]
-
+let gameIsActive = false;
 function initiateExercise() {
+  gameIsActive = true;
   audioPlayer.onended = null; 
-  overlay.style.display = "none"
+  
   const selectedAnimal = animalList[Math.floor(Math.random() * animalList.length)]
   const patternImage = "assets/images/"+selectedAnimal+"-pattern.jpg";
   const svg = d3.select("svg");
@@ -204,7 +205,7 @@ function initiateExercise() {
         message.innerHTML = selected_string;
         audioPlayer.src = 'assets/audio/' + selected_string + '.mp3';
         audioPlayer.play();
-        audioPlayer.onended = function() {setTimeout(initiateExercise, 1000);}
+        audioPlayer.onended = function() {setTimeout(gameEnd, 1000);}
       };
     } else{
       
@@ -212,7 +213,7 @@ function initiateExercise() {
         message.innerHTML = selected_string;
         audioPlayer.src = 'assets/audio/' + selected_string + '.mp3';
         audioPlayer.play();
-        audioPlayer.onended = function() {setTimeout(initiateExercise, 1000);}
+        audioPlayer.onended = function() {setTimeout(gameEnd, 1000);}
   
     }
     
@@ -269,7 +270,8 @@ function drawPath(pathData, key) {
       .attr("fill", "none")
       .attr("d", path)
       .attr("stroke", "url(#pattern)")
-      .attr("stroke-width", "50")
+      // .attr("stroke", "#000")
+      .attr("stroke-width", "80")
       .style("display", "none");
 
     lineList.push(newLine);
@@ -381,30 +383,49 @@ groupList.forEach((group, i) => {
   }
   selectPath();
 
-
+  var progressbarStarted = false;
 
   function pauseProgressbar() {
     var element = document.getElementById("progressBar");
     element.classList.add("paused");
   }
+
+  const flashProgressBar = () => {
+    const progressBarBox = document.getElementById("progressBarBox");
+      progressBarBox.classList.add("flashAnimation");
+  };
+
   function startProgressbar() {
+    if (progressbarStarted) {
+      return; // If progress bar has already started, exit the function
+    }
+    progressbarStarted = true;
     var element = document.getElementById("progressBar");
     element.classList.remove("paused");
+    setTimeout(flashProgressBar, timerDuration * 1000 * 0.8);
     setTimeout(endTimer, timerDuration*1000);
-
-  }
-  function endTimer(){
     var progressBar = document.querySelector('.progressBar');
-    progressBar.classList.add("paused");
     progressBar.style.animation = 'none';
     void progressBar.offsetWidth;
     progressBar.style.animation = null;
 
+  }
+  function endTimer(){
+    gameIsActive = false;
+    
+    
+  }
+
+  function gameEnd(){
+    overlay.style.display = "none"
+    if(gameIsActive){
+      initiateExercise();
+    } else {
     document.getElementById('actionMessage').classList.remove('hidden')
     actionBox = document.getElementById("actionBox").classList.remove('hidden');
     document.getElementById("mainDiv").classList.add('hidden');
   }
-
+}
 
   function enableDragging() {
     draggingEnabled = true;

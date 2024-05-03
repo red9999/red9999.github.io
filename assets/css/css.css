@@ -20,18 +20,46 @@ body {
   cursor:pointer;
 }
 
-#progressBarBox {
+.progressBarBackground {
   width: 90%;
   margin: 10px auto 0 auto;
   height: 22px;
   background-color: #efd0d0;
+  
 }
+.flashAnimation {
+  animation: flashBackground 0.5s infinite; 
+  transition: background-color 0.5s; 
+}
+@keyframes flashBackground {
+  0% {
+    background-color: #efd0d0;
+  }
+  50% {
+    background-color: #d05656;
+  }
+  100% {
+    background-color: #efd0d0;
+  }
+}
+.blinkdiv {
+    height: 100px;
+    background-color: black;
+    animation-name: blackWhite;  
+    animation-iteration-count: infinite;  
+    animation-duration: 2s; 
+} 
 
 .progressBar {
   height: 100%;
   transform-origin: left center;
   background-color: #d05656;
   animation: roundtime calc(60s) linear forwards;
+}
+
+#actionMessage{
+  font-size: 5em;
+    color: #f27457;
 }
 
 @keyframes roundtime {
