@@ -128,3 +128,32 @@ body {
   }
   /* Adjust other elements within the header as needed */
 }
+
+
+
+
+
+.overlay {
+  display:none;
+  width: 100%;
+  height: 100%;
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  background-image: url('https://picsum.photos/500/500');
+  background-position: center;
+  background-repeat: no-repeat;
+  animation-name: scale-in;
+  animation-duration: 3s;
+  background-size: 0px;
+}
+
+@keyframes scale-in {
+  0% {
+    background-size: 0px;
+  }
+  100% {
+    background-size: 80%;
+  }
+} 

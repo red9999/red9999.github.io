@@ -4,6 +4,12 @@ const animalList = ["deer", "dog", "frog", "giraffe", "pig", "tiger", "zebra"]
 const touchRadius = 100;
 const circleSize = 180;
 const timerDuration = 60; // in seconds, also to be set in css
+
+function openNav() {
+  document.getElementById("myNav").style.width = "100%";
+}
+
+
 const numbersDict = {
   0: [
     "M310 -632C162 -632 90 -479 90 -289C90 -97 162 48 311 48S532 -97 532 -289C532 -479 460 -632 312 -632",
@@ -133,10 +139,13 @@ startButton.addEventListener("click", function () {
 });
 
 
+const overlay = document.getElementById("overlayImage")
 
-
+successImages = ["astronaut", "cat", "cat2", "chicken", "monkey", "pig", "rabbit"]
 
 function initiateExercise() {
+  audioPlayer.onended = null; 
+  overlay.style.display = "none"
   const selectedAnimal = animalList[Math.floor(Math.random() * animalList.length)]
   const patternImage = "assets/images/"+selectedAnimal+"-pattern.jpg";
   const svg = d3.select("svg");
@@ -178,6 +187,15 @@ function initiateExercise() {
 
 
   function playPraise() {
+    console.log("praise")
+    succesImage = successImages[(Math.floor(Math.random() * successImages.length))]
+    overlay.style.backgroundImage = "url('assets/images/success/"+succesImage+".png')";
+    overlay.style.display = "block"
+    overlay.style.animationName = "scale-in";
+      overlay.style.animationDuration = "1s";
+      overlay.style.backgroundSize = "80%";
+
+
     if (randomKey.length > 1) {
       audioPlayer.src = 'assets/audio/' + randomKey + '.mp3';
       audioPlayer.play();
@@ -186,9 +204,18 @@ function initiateExercise() {
         message.innerHTML = selected_string;
         audioPlayer.src = 'assets/audio/' + selected_string + '.mp3';
         audioPlayer.play();
-        audioPlayer.onended = null; // Remove the event listener after it's triggered once
+        audioPlayer.onended = function() {setTimeout(initiateExercise, 1000);}
       };
+    } else{
+      
+        var selected_string = praise_list[(Math.floor(Math.random() * praise_list.length))];
+        message.innerHTML = selected_string;
+        audioPlayer.src = 'assets/audio/' + selected_string + '.mp3';
+        audioPlayer.play();
+        audioPlayer.onended = function() {setTimeout(initiateExercise, 1000);}
+  
     }
+    
   }
   
 
@@ -414,7 +441,7 @@ groupList.forEach((group, i) => {
       if (currentPath == lineList.length - 1) {
         playPraise();
         circle.on(".drag", null);
-        setTimeout(initiateExercise, 2000);
+        
 
       } else {
         currentPath += 1;
