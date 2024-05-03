@@ -395,6 +395,12 @@ groupList.forEach((group, i) => {
       progressBarBox.classList.add("flashAnimation");
   };
 
+
+  const flashProgressBar = () => {
+    const progressBarBox = document.getElementById("progressBarBox");
+      progressBarBox.classList.add("flashAnimation");
+  };
+
   function startProgressbar() {
     if (progressbarStarted) {
       return; // If progress bar has already started, exit the function
