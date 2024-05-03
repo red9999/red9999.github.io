@@ -138,9 +138,19 @@ transform: translate(-50%, -50%); /* Center horizontally and vertically */
   box-shadow: 0 3px 0 #F2D785;
 }
 
+.svg-container {
+    /* display: flex; */
+    /* justify-content: space-between;  */
+    align-items: center; 
+}
 
 
 .hidden{
   visibility:hidden;
   display:none!important;
+}
+
+.svg-group {
+  display: inline-block;
+  max-height:24vh;
 }

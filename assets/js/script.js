@@ -76,9 +76,19 @@ X: ["M70 0L516 680",
 "M537 0L93 680"],
 Y: ["M50 -632L285 -248L525 -632",
 "M285 -248L285 48"],
-Z: ["M110 -622L498 -622L498 -618L111 34L111 38L509 38"]
-
-
+Z: ["M110 -622L498 -622L498 -618L111 34L111 38L509 38"],
+LIAM: "",
+LUCAS: "",
+PAPA: "",
+MAMA: "",
+OPA: "",
+OMA: "",
+APPEL: "",
+STOEL: "",
+TAFEL: "",
+TV: "",
+WATER: "",
+AUTO: ""
 }
 
 var audioPlayer = document.getElementById('audioPlayer');
@@ -130,11 +140,12 @@ function initiateExercise() {
   const selectedAnimal = animalList[Math.floor(Math.random() * animalList.length)]
   const patternImage = "assets/images/"+selectedAnimal+"-pattern.jpg";
   const svg = d3.select("svg");
+  const svgContainer = d3.select("#svgContainer");
 
   document.getElementById("actionBox").classList.add('hidden');
   document.getElementById("mainDiv").classList.remove('hidden');
 
-  document.getElementById("svgbox").innerHTML = ''
+  document.getElementById("svgContainer").innerHTML = ''
 
   // Select random key
   const keys = Object.keys(numbersDict);
@@ -145,34 +156,42 @@ function initiateExercise() {
     randomKey = keys[Math.floor(Math.random() * keys.length)];
   }
 
-  const chosenPath = numbersDict[randomKey];
+
 
   // Function to load and play the MP3 files sequentially
-  function playAudio() {
-    audioPlayer.src = 'assets/audio/Schrijf de ' + randomKey + '.mp3';
+  function playAudio(currentKey) {
+    audioPlayer.src = 'assets/audio/Schrijf de ' + currentKey + '.mp3';
     audioPlayer.play();
-  }
- 
-  playAudio()
-  // Get assign playAudio to the play button
-  var playButton = document.getElementById("playButton");
-  playButton.addEventListener("click", function () {
-    playAudio();
-  });
-
-  // Set the text of the instruction message
+      // Set the text of the instruction message
   letterElement = document.getElementById("message");
-  letterElement.innerHTML = 'Schrijf de ' + randomKey;
+  letterElement.innerHTML = 'Schrijf de ' + currentKey;
+    // Get assign playAudio to the play button
+    var playButton = document.getElementById("playButton");
+    playButton.addEventListener("click", function () {
+      playAudio(currentKey);
+    });
+  }
+  playAudio(randomKey[0])
+ 
+
+
+
 
 
   function playPraise() {
-    var selected_string = praise_list[(Math.floor(Math.random() * praise_list.length))]
-    message.innerHTML = selected_string;
-    audioPlayer.src = 'assets/audio/' + selected_string + '.mp3';
-    audioPlayer.play();
+    if (randomKey.length > 1) {
+      audioPlayer.src = 'assets/audio/' + randomKey + '.mp3';
+      audioPlayer.play();
+      audioPlayer.onended = function() {
+        var selected_string = praise_list[(Math.floor(Math.random() * praise_list.length))];
+        message.innerHTML = selected_string;
+        audioPlayer.src = 'assets/audio/' + selected_string + '.mp3';
+        audioPlayer.play();
+        audioPlayer.onended = null; // Remove the event listener after it's triggered once
+      };
+    }
   }
-
-  const pathData = chosenPath;
+  
 
   // define pattern
   const defs = svg.append("defs");
@@ -185,27 +204,58 @@ function initiateExercise() {
 
   pattern.append("image").attr("xlink:href", patternImage);
 
-  // Draw path
+
+
+
+  
+
+
+  // Draw path and hidden lines
 const pathList = [];
-const animationDuration = 1500;
-function drawPath() {
+const lineList = [];
+const groupList = [];
+
+function drawPath(pathData, key) {
+  const newGroup = svgContainer.append("svg") // Create a new SVG element for each letter
+  // const transformValue = i*400
+  .attr("id", "svgGroup"+key)
+  .attr("class", "svg-group")
+  // .attr("class", "svg-container")
+  .attr("preserveAspectRatio", "xMidYMid meet");
+  // .attr("class", )
+  groupList.push(newGroup)
   pathData.forEach((path, i) => {
-    const newPath = svg.append("path")
+
+    const newPath = newGroup.append("path") // Append path to the new SVG element
       .attr("id", "shape" + i)
       .attr("class", "shape")
       .attr("d", path)
       .attr("stroke", "")
-      .attr("stroke-width", "50");
+      .attr("stroke-width", "50")
+      .attr("fill", "none");
 
     pathList.push(newPath);
+    
+
+    const newLine = newGroup.append("path") // Append line to the new SVG element
+      .attr("id", "line" + i)
+      .attr("fill", "none")
+      .attr("d", path)
+      .attr("stroke", "url(#pattern)")
+      .attr("stroke-width", "50")
+      .style("display", "none");
+
+    lineList.push(newLine);
   });
 }
+
+// Adjust xOffset and yOffset based on the positioning requirements.
+
 
 // Animate the drawing of the path
 function animatePath() {
   let cumulativeDuration = 0;
-  const animationSpeed = 2000; // Aanimation speed
-
+  const animationSpeed = 2500; // Aanimation speed
   pathList.forEach((currentPath, i) => {
     const totalLength = currentPath.node().getTotalLength();
     const animationDuration = totalLength / animationSpeed;
@@ -223,57 +273,48 @@ function animatePath() {
   });
 }
 
+for (let key = 0; key < randomKey.length; key++){
+  const currentKey = randomKey[key]
 
-drawPath();
-animatePath();
-
-// Draw hidden lines
-const lineList = [];
-
-function drawHiddenLines() {
-  pathData.forEach((path, i) => {
-    const newLine = svg.append("path")
-      .attr("id", "line" + i)
-      .attr("fill", "none")
-      .attr("d", path)
-      .attr("stroke", "url(#pattern)")
-      .attr("stroke-width", "50")
-      .style("display", "none");
-
-    lineList.push(newLine);
-  });
+  pathData = numbersDict[currentKey];
+    drawPath(pathData, key);
+    animatePath();
 }
 
-drawHiddenLines();
+const groupWidthPercentage = 100 / groupList.length;
 
-
-  svgbox = svg.node().getBBox();
-
-
-  svg.attr(
+groupList.forEach((group, i) => {
+  groupBBox = group.node().getBBox();
+  group.attr(
     "viewBox",
-    `${svgbox.x - (circleSize / 2)} ${svgbox.y - (circleSize / 2)} ${svgbox.width + 190} ${svgbox.height + 190
-    }`
-  );
+    `0 ${groupBBox.y - (circleSize / 2)} ${groupBBox.width + circleSize+10} ${groupBBox.height + circleSize+10
+    }`);
+  group.style("max-width", `${groupWidthPercentage - 1}%`);
+})
 
+  //interaction
 
-  let path, pathLength, startPoint, lastPoint, lastLength, circle;
+  let path, pathLength, startPoint, lastPoint, lastLength, circle, svgGroup;
   let draggingEnabled = true;
-  const itr = document.getElementById("itr");
   const message = document.getElementById("message");
   let currentPath = 0;
+  let currentGroup = 0;
+  let firstIteration = true
   
-
-
   function selectPath() {
-
-
+    
     circleElement = document.getElementById("circle")
     if (circleElement !== null) {
       circleElement.remove();
     }
-
     path = lineList[currentPath].node();
+    if (!firstIteration && path.id == "line0") {
+      currentGroup ++;
+      playAudio(randomKey[currentGroup])
+    }
+
+    svgGroup = d3.select(lineList[currentPath].node().parentNode);
+    
     fillpercentage = 0;
     pathLength = path.getTotalLength() || 0;
     startPoint = path.getPointAtLength(0);
@@ -287,7 +328,7 @@ drawHiddenLines();
   }
 
   function createCircle() {
-    return svg.append("image")
+    return svgGroup.append("image")
       .attr("id", "circle")
       .attr("xlink:href", "assets/images/" + selectedAnimal + "-face.png")
       .attr("width", circleSize)
@@ -312,21 +353,13 @@ drawHiddenLines();
     var element = document.getElementById("progressBar");
     element.classList.add("paused");
   }
-  var progressbarStarted = false;
-
   function startProgressbar() {
-    if (progressbarStarted) {
-      return; // If progress bar has already started, exit the function
-    }
-    progressbarStarted = true; // Set flag to indicate progress bar has started
     var element = document.getElementById("progressBar");
     element.classList.remove("paused");
-    console.log(`Start timer ${timerDuration}`)
-    setTimeout(endTimer, timerDuration * 1000);
+    setTimeout(endTimer, timerDuration*1000);
+
   }
-  
   function endTimer(){
-    console.log("endTimer")
     var progressBar = document.querySelector('.progressBar');
     progressBar.classList.add("paused");
     progressBar.style.animation = 'none';
@@ -336,6 +369,7 @@ drawHiddenLines();
     document.getElementById('actionMessage').classList.remove('hidden')
     actionBox = document.getElementById("actionBox").classList.remove('hidden');
     document.getElementById("mainDiv").classList.add('hidden');
+    actionBox.innerHTML = "Done!"
   }
 
 
@@ -368,6 +402,7 @@ drawHiddenLines();
     if (fillpercentage > 0.98) {
       disableDragging();
       updateLineFill(1);
+
       circle.attr("x", fullPoint.x - (circleSize / 2)).attr("y", fullPoint.y - (circleSize / 2))
 
       if (currentPath == lineList.length - 1) {
@@ -377,6 +412,7 @@ drawHiddenLines();
 
       } else {
         currentPath += 1;
+        firstIteration = false;
         selectPath();
       }
     } else {
