@@ -2,68 +2,61 @@ html {
   overflow: hidden;
   overscroll-behavior: none;
 }
-body{
-  background-color: #F2F2F2;
+
+body {
+  background-color: #f2f2f2;
   touch-action: none;
 }
 
-#actionMessage{
-  font-size: 3em;
-  font-weight: bolder;
-  color: #F27457;
-  margin-bottom:20px;
-}
 
-#message{
+#circle {
+  cursor:pointer;
+}
+#message {
   font-size: 2em;
   vertical-align: bottom;
-  padding-left: 10px;
-  color: #F27457;
+  color: #f27457;
   font-weight: bolder;
+  cursor:pointer;
 }
+
 #progressBarBox {
-    width: 90%;
-    margin: 10px auto;
-    height: 22px;
-    background-color: #efd0d0;
-  }
+  width: 90%;
+  margin: 10px auto 0 auto;
+  height: 22px;
+  background-color: #efd0d0;
+}
+
 .progressBar {
-    height: 22px;
-    transform-origin: left center;
-    background-color: #d05656;
-    animation: roundtime calc(60s) linear forwards;
-  }
-  
-  @keyframes roundtime {
-    to {
-      /* More performant than `width` */
-      transform: scaleX(0);
-    }
-  }
+  height: 100%;
+  transform-origin: left center;
+  background-color: #d05656;
+  animation: roundtime calc(60s) linear forwards;
+}
 
-
-  @keyframes fillAnimation {
-    100% { stroke-dashoffset: 0 }
+@keyframes roundtime {
+  to {
+    transform: scaleX(0);
   }
-  
-  .animateFill {
-    animation: fillAnimation ease-in forwards; 
-  }
-  
-  .viewbox {
-    height: calc(100dvh - 120px);
-    /* width:90dvh; */
-    margin: 0 auto;
-  }
-  
+}
 
-  
+@keyframes fillAnimation {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
 
-.paused{
-    -webkit-animation-play-state:paused;
-    -moz-animation-play-state:paused;
-    -o-animation-play-state:paused; 
-    animation-play-state:paused;
+.animateFill {
+  animation: fillAnimation ease-in forwards;
+}
+
+.viewbox {
+  height: calc(100vh - 60px);
+  margin: 0 auto;
+}
+
+.paused {
+  animation-play-state: paused;
 }
 
 #actionBox {
@@ -73,81 +66,40 @@ body{
   height: 95vh;
 }
 
-
-#startButton{
+#startButton {
   display: inline-block;
-  background-color: #F2D785;
+  background-color: #f2d785;
   padding: 15px 40px;
   border: none;
   border-radius: 30px;
-
   font-size: 60px;
   text-decoration: none;
   text-transform: uppercase;
-  color: #F27457;
-  font-weight:bolder;
-
-  box-shadow: 0 3px 0 #F27457;
+  color: #f27457;
+  font-weight: bolder;
+  box-shadow: 0 3px 0 #f27457;
   cursor: pointer;
   transition: all 100ms linear;
-
 }
+
 #startButton:hover {
   transform: translateY(-4px);
-  box-shadow: 0 7px 0 #F27457;
+  box-shadow: 0 7px 0 #f27457;
 }
 
-#startButton:focus { outline: 0; }
-
-
-
-#theLine {
-  transition: stroke-dasharray 0.3s ease;
-}
-#circle{
-  cursor: pointer;
-}
-.player {
-background: #d05656;
-width: 40px;
-height: 40px;
-border: none;
-position: relative;
-display: inline-block;
-vertical-align: middle;
-cursor: pointer;
-text-indent: -9999px;
-box-shadow: 0 1px 0 #F2D785;
-border-radius: 50%; /* Make it a circle */
-}
-
-.player span {
-width: 0;
-height: 0;
-border-top: 10px solid transparent;
-border-left: 15px solid #F2D785;
-border-bottom: 10px solid transparent;
-position: absolute;
-top: 50%; /* Adjusted */
-left: 50%; /* Adjusted */
-transform: translate(-50%, -50%); /* Center horizontally and vertically */
-}
-
-.player:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 3px 0 #F2D785;
+#startButton:focus {
+  outline: 0;
 }
 
 .svg-container {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-
-.hidden{
-  visibility:hidden;
-  display:none!important;
+.hidden {
+  visibility: hidden;
+  display: none !important;
 }
 
 .svg-group {
@@ -155,3 +107,24 @@ transform: translate(-50%, -50%); /* Center horizontally and vertically */
   max-height: 100%;
 }
 
+
+/* Original CSS */
+
+#header {
+  height: auto; /* Change this to auto so the height adjusts based on content */
+}
+
+/* Add this media query to adjust the header and its contents on smaller screens */
+@media screen and (max-width: 768px) {
+
+  /* Example adjustments for contents within the header */
+  #progressBarBox {
+    margin-top: 5px;
+    height: 15px; /* Adjust height */
+  }
+
+  #message {
+    font-size: 1.5em; /* Adjust font size */
+  }
+  /* Adjust other elements within the header as needed */
+}

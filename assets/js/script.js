@@ -92,7 +92,7 @@ AUTO: ""
 }
 
 var audioPlayer = document.getElementById('audioPlayer');
-
+const playButton = document.getElementById("message");
 let alphanum_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
   "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 var praise_list = ["Goed gedaan!", "Fantastisch!", "Geweldig!", "Prima!", "Heel goed!", "Uitstekend!", "Knap hoor!", "Fantastisch gedaan!", "Wat goed zeg!", "Klasse!", "Goed bezig!", "Wat knap van je!"]
@@ -156,7 +156,7 @@ function initiateExercise() {
     randomKey = keys[Math.floor(Math.random() * keys.length)];
   }
 
-
+ 
 
   // Function to load and play the MP3 files sequentially
   function playAudio(currentKey) {
@@ -165,17 +165,16 @@ function initiateExercise() {
       // Set the text of the instruction message
   letterElement = document.getElementById("message");
   letterElement.innerHTML = 'Schrijf de ' + currentKey;
-    // Get assign playAudio to the play button
-    var playButton = document.getElementById("playButton");
-    playButton.addEventListener("click", function () {
-      playAudio(currentKey);
-    });
+
   }
   playAudio(randomKey[0])
  
 
 
-
+    // Get assign playAudio to the play button
+    playButton.addEventListener("click", function () {
+      audioPlayer.play();
+    });
 
 
   function playPraise() {
@@ -194,7 +193,8 @@ function initiateExercise() {
   
 
   // define pattern
-  const defs = svgContainer.append("svg").style("height","0").style("width","0").append("defs");
+  const defsDiv = svgContainer.append("div").style("height","0px").style("width","0px")
+  const defs = defsDiv.append("svg").append("defs");
   const pattern = defs
     .append("pattern")
     .attr("id", "pattern")
@@ -255,7 +255,7 @@ function drawPath(pathData, key) {
 // Animate the drawing of the path
 function animatePath() {
   let cumulativeDuration = 0;
-  const animationSpeed = 2500; // Aanimation speed
+  const animationSpeed = 3000; // Aanimation speed
   pathList.forEach((currentPath, i) => {
     const totalLength = currentPath.node().getTotalLength();
     const animationDuration = totalLength / animationSpeed;
@@ -376,7 +376,6 @@ groupList.forEach((group, i) => {
     document.getElementById('actionMessage').classList.remove('hidden')
     actionBox = document.getElementById("actionBox").classList.remove('hidden');
     document.getElementById("mainDiv").classList.add('hidden');
-    actionBox.innerHTML = "Done!"
   }
 
 
