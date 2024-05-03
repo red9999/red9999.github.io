@@ -51,7 +51,7 @@ body {
 }
 
 .viewbox {
-  height: calc(100vh - 60px);
+  height: calc(100dvh - 80px);
   margin: 0 auto;
 }
 
@@ -119,7 +119,7 @@ body {
 
   /* Example adjustments for contents within the header */
   #progressBarBox {
-    margin-top: 5px;
+    margin: 5px auto 0 auto;
     height: 15px; /* Adjust height */
   }
 
