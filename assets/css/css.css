@@ -31,9 +31,9 @@ body {
   
 }
 .flashAnimation {
-  animation: flashBackground 0.5s infinite; 
-  transition: background-color 0.5s; 
+  animation: flashBackground 0.5s infinite;
 }
+
 @keyframes flashBackground {
   0% {
     background-color: #efd0d0;
@@ -45,24 +45,12 @@ body {
     background-color: #efd0d0;
   }
 }
-.blinkdiv {
-    height: 100px;
-    background-color: black;
-    animation-name: blackWhite;  
-    animation-iteration-count: infinite;  
-    animation-duration: 2s; 
-} 
 
 .progressBar {
   height: 100%;
   transform-origin: left center;
   background-color: #d05656;
-  animation: roundtime calc(60s) linear forwards;
-}
-
-#actionMessage{
-  font-size: 5em;
-    color: #f27457;
+  animation: roundtime 60s linear forwards;
 }
 
 @keyframes roundtime {
@@ -71,15 +59,22 @@ body {
   }
 }
 
+#actionMessage{
+  font-size: 5em;
+    color: #f27457;
+}
+
+.animateFill {
+  animation: fillAnimation ease-in forwards;
+}
+
 @keyframes fillAnimation {
   to {
     stroke-dashoffset: 0;
   }
 }
 
-.animateFill {
-  animation: fillAnimation ease-in forwards;
-}
+
 
 .viewbox {
   height: calc(100dvh - 80px);
@@ -124,13 +119,17 @@ body {
 
 .svg-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
 .hidden {
   visibility: hidden;
   display: none !important;
+}
+
+.block {
+  display: block !important;
 }
 
 .svg-group {
@@ -165,26 +164,27 @@ body {
 
 
 .overlay {
-  display:none;
+  display: none;
   width: 100%;
   height: 100%;
   position: fixed; 
   z-index: 1; 
   left: 0;
   top: 0;
-  background-image: url('https://picsum.photos/500/500');
+  background-image: url('your-image-url.jpg');
   background-position: center;
   background-repeat: no-repeat;
   animation-name: scale-in;
   animation-duration: 3s;
-  background-size: 0px;
+  transform: scale(0);
+  transform-origin: center;
 }
 
 @keyframes scale-in {
   0% {
-    background-size: 0px;
+    transform: scale(0);
   }
   100% {
-    background-size: 80%;
+    transform: scale(1);
   }
-} 
+}

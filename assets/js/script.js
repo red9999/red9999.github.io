@@ -1,9 +1,11 @@
 console.clear();
 const searchParams = new URLSearchParams(window.location.search);
 const animalList = ["deer", "dog", "frog", "giraffe", "pig", "tiger", "zebra"]
-const touchRadius = 100;
-const circleSize = 180;
+const circleSize = 200;
+const touchRadius = circleSize * 1.3;
+
 const timerDuration = 60; // in seconds, also to be set in css
+
 
 function openNav() {
   document.getElementById("myNav").style.width = "100%";
@@ -97,11 +99,10 @@ WATER: "",
 AUTO: ""
 }
 
-var audioPlayer = document.getElementById('audioPlayer');
-const playButton = document.getElementById("message");
-let alphanum_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
+
+let alphanumList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
   "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-var praise_list = ["Goed gedaan!", "Fantastisch!", "Geweldig!", "Prima!", "Heel goed!", "Uitstekend!", "Knap hoor!", "Fantastisch gedaan!", "Wat goed zeg!", "Klasse!", "Goed bezig!", "Wat knap van je!"]
+var praiseList = ["Goed gedaan!", "Fantastisch!", "Geweldig!", "Prima!", "Heel goed!", "Uitstekend!", "Knap hoor!", "Fantastisch gedaan!", "Wat goed zeg!", "Klasse!", "Goed bezig!", "Wat knap van je!"]
 
 
 
@@ -110,12 +111,12 @@ function preloadAudio() {
   const files = [];
 
   // Add "Schrijf de [character]" MP3 files to the list
-  alphanum_list.forEach(character => {
+  alphanumList.forEach(character => {
     files.push(`assets/audio/Schrijf de ${character}.mp3`);
   });
 
   // Add praise MP3 files to the list
-  praise_list.forEach(praise => {
+  praiseList.forEach(praise => {
     files.push(`assets/audio/${praise}.mp3`);
   });
 
@@ -155,11 +156,13 @@ startButton.addEventListener("click", function () {
 
 const overlay = document.getElementById("overlayImage")
 
-successImages = ["astronaut", "cat", "cat2", "chicken", "monkey", "pig", "rabbit"]
+const successImages = ["astronaut", "cat", "cat2", "chicken", "monkey", "pig", "rabbit"]
 let gameIsActive = false;
 let progressbarStarted = false;
 
 function initiateExercise() {
+  const audioPlayer = document.getElementById('audioPlayer');
+const message = document.getElementById("message");
   audioPlayer.onended = null; 
   
   const selectedAnimal = animalList[Math.floor(Math.random() * animalList.length)]
@@ -183,55 +186,57 @@ function initiateExercise() {
 
  
 
-  // Function to load and play the MP3 files sequentially
+  
   function playAudio(currentKey) {
-    audioPlayer.src = 'assets/audio/Schrijf de ' + currentKey + '.mp3';
+    const audioSrc = `assets/audio/Schrijf de ${currentKey}.mp3`;
+    audioPlayer.src = audioSrc;
     audioPlayer.play();
-      // Set the text of the instruction message
-  letterElement = document.getElementById("message");
-  letterElement.innerHTML = 'Schrijf de ' + currentKey;
-
+    message.innerHTML = `Schrijf de ${currentKey}`;
   }
-  playAudio(randomKey[0])
- 
-
-
-    // Get assign playAudio to the play button
-    playButton.addEventListener("click", function () {
-      audioPlayer.play();
-    });
-
-
+  
+  function showSuccessImage() {
+    const successImage = successImages[Math.floor(Math.random() * successImages.length)];
+    overlay.style.backgroundImage = `url('assets/images/success/${successImage}.png')`;
+    overlay.style.display = "block";
+    // overlay.style.animationName = "scale-in";
+    // overlay.style.animationDuration = "1s";
+    // overlay.style.backgroundSize = "80%";
+  }
+  
+  function praiseAudio() {
+    const selectedString = praiseList[Math.floor(Math.random() * praiseList.length)];
+    message.innerHTML = selectedString;
+    const audioSrc = `assets/audio/${selectedString}.mp3`;
+    audioPlayer.src = audioSrc;
+    audioPlayer.play();
+    audioPlayer.onended = function() {
+      setTimeout(gameEnd, 1000);
+    };
+  }
+  
   function playPraise() {
-    succesImage = successImages[(Math.floor(Math.random() * successImages.length))]
-    overlay.style.backgroundImage = "url('assets/images/success/"+succesImage+".png')";
-    overlay.style.display = "block"
-    overlay.style.animationName = "scale-in";
-      overlay.style.animationDuration = "1s";
-      overlay.style.backgroundSize = "80%";
-
-
     if (randomKey.length > 1) {
-      audioPlayer.src = 'assets/audio/' + randomKey + '.mp3';
+      const audioSrc = `assets/audio/${randomKey}.mp3`;
+      audioPlayer.src = audioSrc;
       audioPlayer.play();
       audioPlayer.onended = function() {
-        var selected_string = praise_list[(Math.floor(Math.random() * praise_list.length))];
-        message.innerHTML = selected_string;
-        audioPlayer.src = 'assets/audio/' + selected_string + '.mp3';
-        audioPlayer.play();
-        audioPlayer.onended = function() {setTimeout(gameEnd, 1000);}
+        showSuccessImage();
+        praiseAudio();
       };
-    } else{
-      
-        var selected_string = praise_list[(Math.floor(Math.random() * praise_list.length))];
-        message.innerHTML = selected_string;
-        audioPlayer.src = 'assets/audio/' + selected_string + '.mp3';
-        audioPlayer.play();
-        audioPlayer.onended = function() {setTimeout(gameEnd, 1000);}
-  
+    } else {
+      showSuccessImage();
+      praiseAudio();
     }
-    
   }
+  
+  // Call playAudio with the first randomKey
+  playAudio(randomKey[0]);
+  
+  // Add event listener to play the audio on message click
+  message.addEventListener("click", function() {
+    audioPlayer.play();
+  });
+  
   
 
   // define pattern
@@ -345,7 +350,6 @@ groupList.forEach((group, i) => {
 
   let path, pathLength, startPoint, lastPoint, lastLength, circle, svgGroup;
   let draggingEnabled = true;
-  const message = document.getElementById("message");
   let currentPath = 0;
   let currentGroup = 0;
   let firstIteration = true
@@ -362,7 +366,7 @@ groupList.forEach((group, i) => {
       playAudio(randomKey[currentGroup])
     }
 
-    svgGroup = d3.select(lineList[currentPath].node().parentNode);
+    svgGroup = d3.select(path.parentNode);
     
     fillpercentage = 0;
     pathLength = path.getTotalLength() || 0;
@@ -431,7 +435,6 @@ groupList.forEach((group, i) => {
   }
 
   function gameEnd(){
-    console.log(gameIsActive)
     overlay.style.display = "none"
     if(gameIsActive){
       initiateExercise();
@@ -453,73 +456,78 @@ groupList.forEach((group, i) => {
     draggingEnabled = false;
   }
 
+  function updateLineFill(lastLength) {
+    const dashArray = lastLength + " " + pathLength;
+    path.style.strokeDasharray = dashArray;
+    lineList[currentPath].classed("block", true);
+
+  }
 
   function pointModifier(point, circle) {
-    const p = closestPoint(path, pathLength, point);
-    if (
-      point.x < p.point.x - touchRadius ||
-      point.x > p.point.x + touchRadius ||
-      point.y < p.point.y - touchRadius ||
-      point.y > p.point.y + touchRadius
-    ) {
-      disableDragging();
-    }
+    const touchBox = {
+      minX: parseFloat(circle.attr("x")) - touchRadius,
+      maxX: parseFloat(circle.attr("x")) + touchRadius,
+      minY: parseFloat(circle.attr("y")) - touchRadius,
+      maxY: parseFloat(circle.attr("y")) + touchRadius
+  
+    };
 
+    if (
+        point.x < touchBox.minX ||
+        point.x > touchBox.maxX ||
+        point.y < touchBox.minY ||
+        point.y > touchBox.maxY
+    ) {
+      console.log("disabledrag")
+        disableDragging();
+        return; 
+    }
+    const p = closestPoint(path, pathLength, point);
     lastPoint.x = point.x;
     lastPoint.y = point.y;
-    if (p.length > lastLength){
     lastLength = p.length;
-    fillpercentage = lastLength / pathLength;
-    if (fillpercentage > 0.98) {
-      disableDragging();
-      updateLineFill(1);
+    fillpercentage = lastLength / pathLength
 
-      circle.attr("x", fullPoint.x - (circleSize / 2)).attr("y", fullPoint.y - (circleSize / 2))
+    if (fillpercentage > 0.95) {
+      disableDragging();
+      updateLineFill(pathLength);
+      circle.attr("x", fullPoint.x - (circleSize / 2)).attr("y", fullPoint.y - (circleSize / 2));
 
       if (currentPath == lineList.length - 1) {
-        playPraise();
-        circle.on(".drag", null);
-        
-
+          playPraise();
+          circle.on(".drag", null);
       } else {
-        currentPath += 1;
-        firstIteration = false;
-        selectPath();
+          currentPath += 1;
+          firstIteration = false;
+          selectPath();
       }
-    } else {
-      updateLineFill(lastLength / pathLength);
+  } else {
+      updateLineFill(lastLength);
       circle.attr("x", p.point.x - (circleSize / 2)).attr("y", p.point.y - (circleSize / 2));
-    }
-  }
   }
 
+}
 
-  function updateLineFill(ratio) {
-    let path = lineList[currentPath].node();
-    const pathLength = path.getTotalLength();
-    const dashArray = pathLength * ratio + " " + pathLength;
-    path.style.strokeDasharray = dashArray;
-    lineList[currentPath].style("display", "block");
-  }
+
 
   function closestPoint(pathNode, pathLength, point) {
-    var precision = 1,
+    var precision = 10,
       best,
       bestLength,
       bestDistance = Infinity;
     var traveled = distance2sqrt(lastPoint);
-    var scanFrom = lastLength - traveled;
+    var scanFrom = Math.max(lastLength, 0);;
     var scanTo = lastLength + traveled;
-    scanFrom = scanFrom < 0 ? 0 : scanFrom;
 
-    if (traveled * 2 < 20) {
-      scanTo = scanFrom + 20;
+
+    if (traveled * 2 < 50) {
+      scanTo = scanFrom + 50;
     }
 
-    scanTo = scanTo > pathLength ? pathLength : scanTo;
+    if (scanTo > pathLength) {
+      scanTo = pathLength;
+    }
 
-    // console.log(scanTo - scanFrom);
-    // linear scan for coarse approximation
     for (
       var scan, scanLength = scanFrom, scanDistance;
       scanLength <= scanTo;
@@ -534,13 +542,8 @@ groupList.forEach((group, i) => {
       }
     }
 
-    var len2 = bestLength + (bestLength === pathLength ? -0.1 : 0.1);
-    // var rotation = getRotation(best, pathNode.getPointAtLength(len2));
-
     return {
       point: best,
-      //   rotation: rotation * DEG,
-      // distance: Math.sqrt(bestDistance),
       length: bestLength,
     };
 
@@ -556,11 +559,5 @@ groupList.forEach((group, i) => {
       return Math.sqrt(dx * dx + dy * dy);
     }
   }
-
-  // function getRotation(p1, p2) {
-  //   var dx = p2.x - p1.x;
-  //   var dy = p2.y - p1.y;
-  //   return Math.atan2(dy, dx);
-  // }
 
 }
