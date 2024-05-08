@@ -251,14 +251,14 @@ if(Math.floor(Math.random() * 10) < 7){
     const snowflakesData = [
       { position: "left", percentage: "1%", delay1: "0s", delay2: "0s" },
       // { position: "left", percentage: "6%", delay1: "1s", delay2: "1s" },
-      { position: "left", percentage: "12%", delay1: "6s", delay2: "0.5s" },
+      { position: "left", percentage: "12%", delay1: "2.5s", delay2: "0.5s" },
       // { position: "left", percentage: "18%", delay1: "4s", delay2: "2s" },
-      { position: "left", percentage: "24%", delay1: "2s", delay2: "2s" },
-      { position: "left", percentage: "28%", delay1: "8s", delay2: "3s" },
-      { position: "right", percentage: "24%", delay1: "6s", delay2: "2s" },
+      { position: "left", percentage: "24%", delay1: "1.2s", delay2: "2s" },
+      { position: "left", percentage: "28%", delay1: "2.9s", delay2: "3s" },
+      { position: "right", percentage: "24%", delay1: "0.8s", delay2: "2s" },
       // { position: "right", percentage: "12%", delay1: "2s", delay2: "1s" },
-      { position: "right", percentage: "12%", delay1: "1s", delay2: "0s" },
-      { position: "right", percentage: "1%", delay1: "3s", delay2: "1s" },
+      { position: "right", percentage: "12%", delay1: "2.5s", delay2: "0s" },
+      { position: "right", percentage: "1%", delay1: "0.4s", delay2: "1s" },
     ];
     
 
@@ -280,7 +280,7 @@ function generateSnowflakes() {
     const audioSrc = `assets/audio/Waar is de ${chosenLetter}.mp3`;
     audioPlayer.src = audioSrc;
     audioPlayer.play();
-    message.innerHTML = `Waar is de *`;
+    message.innerHTML = "Waar is de *";
   }
   playAudio(chosenLetter)
   function getRandomStyles() {
@@ -301,6 +301,13 @@ function generateSnowflakes() {
     if(randomLetter==chosenLetter){
       hasChosenLetter = true;
       snowflake.classList.add("chosenLetter")
+      snowflake.addEventListener('click', function() {
+        // Do something when clicked, for example:
+        gameContainer.html('')
+        showSuccessImage();
+    praiseAudio();
+        // You can replace the alert with any action you want to take
+    });
     }
     snowflakeText.textContent = randomLetter;
     snowflakeText.style.color = `rgba(${r - 80},${g - 80},${b - 80},1)`;
@@ -334,12 +341,14 @@ function generateSnowflakes() {
     chosenSnowFlake.classList.add("newchosenLetter")
     chosenSnowFlake.addEventListener('click', function() {
             // Do something when clicked, for example:
+            gameContainer.html('')
             showSuccessImage();
         praiseAudio();
             // You can replace the alert with any action you want to take
         });
 
   }
+  
   
 }
 

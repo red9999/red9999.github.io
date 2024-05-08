@@ -257,3 +257,7 @@ body {
   /* 0%, 100% { transform: translateX(0); }
   50% { transform: translateX(40px); } */
 }
+
+.chosenLetter{
+  z-index:9999;
+}
