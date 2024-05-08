@@ -518,7 +518,7 @@ groupList.forEach(group => {
 
 
   function closestPoint(pathNode, pathLength, point) {
-    var precision = 5,
+    var precision = 1,
       best,
       bestLength,
       bestDistance = Infinity;
