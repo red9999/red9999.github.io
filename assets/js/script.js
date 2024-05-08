@@ -113,6 +113,7 @@ function preloadAudio() {
   // Add "Schrijf de [character]" MP3 files to the list
   alphanumList.forEach(character => {
     files.push(`assets/audio/Schrijf de ${character}.mp3`);
+    files.push(`assets/audio/Waar is de ${character}.mp3`);
   });
 
   // Add praise MP3 files to the list
@@ -165,42 +166,59 @@ function initiateExercise() {
 const message = document.getElementById("message");
   audioPlayer.onended = null; 
   
-  const selectedAnimal = animalList[Math.floor(Math.random() * animalList.length)]
-  const patternImage = "assets/images/"+selectedAnimal+"-pattern.jpg";
-  const svg = d3.select("svg");
-  const svgContainer = d3.select("#svgContainer");
-
+  
+  const gameContainer = d3.select("#gameContainer");
+  gameContainer.html('')
   document.getElementById("actionBox").classList.add('hidden');
   document.getElementById("mainDiv").classList.remove('hidden');
 
-  document.getElementById("svgContainer").innerHTML = ''
 
-  // Select random key
-  const keys = Object.keys(numbersDict);
-  let randomKey
-  if (searchParams.get('key')){
-    randomKey = searchParams.get('key');
-  } else {
-    randomKey = keys[Math.floor(Math.random() * keys.length)];
+  function pauseProgressbar() {
+    var element = document.getElementById("progressBar");
+    element.classList.add("paused");
   }
-  if(randomKey.length > 1){
-    circleSize *= (1 + (0.05 * randomKey.length));
-    strokeWidth *= (1 + (0.05 * randomKey.length));
-    touchRadius *= (1 + (0.05 * randomKey.length))
-    patternSize *= (1 + (0.05 * randomKey.length))
+  const progressBarBox = document.getElementById("progressBarBox");
+  const flashProgressBar = () => {
+      progressBarBox.classList.add("flashAnimation");
+  };
+
+  function startProgressbar() {
+    if (progressbarStarted) {
+      return; // If progress bar has already started, exit the function
+    }
+    
+    progressbarStarted = true;
+    console.log("Start")
+    var element = document.getElementById("progressBar");
+    element.classList.remove("paused");
+    setTimeout(flashProgressBar, timerDuration * 1000 * 0.8);
+    setTimeout(endTimer, timerDuration*1000);
+    var progressBar = document.querySelector('.progressBar');
+    progressBar.style.animation = 'none';
+    void progressBar.offsetWidth;
+    progressBar.style.animation = null;
+
+  }
+  function endTimer(){
+    gameIsActive = false;
+    
+    
   }
 
- 
-
-  
-  function playAudio(currentKey) {
-    const audioSrc = `assets/audio/Schrijf de ${currentKey}.mp3`;
-    audioPlayer.src = audioSrc;
-    audioPlayer.play();
-    message.innerHTML = `Schrijf de ${currentKey}`;
+  function gameEnd(){
+    overlay.style.display = "none"
+    if(gameIsActive){
+      initiateExercise();
+    } else {
+      progressbarStarted = false;
+    document.getElementById('actionMessage').classList.remove('hidden')
+    actionBox = document.getElementById("actionBox").classList.remove('hidden');
+    document.getElementById("mainDiv").classList.add('hidden');
+    progressBarBox.classList.remove("flashAnimation");
   }
-  
-  function showSuccessImage() {
+}
+
+ function showSuccessImage() {
     const successImage = successImages[Math.floor(Math.random() * successImages.length)];
     overlay.style.backgroundImage = `url('assets/images/success/${successImage}.png')`;
     overlay.style.display = "block";
@@ -216,6 +234,143 @@ const message = document.getElementById("message");
       setTimeout(gameEnd, 1000);
     };
   }
+    // Add event listener to play the audio on message click
+    message.addEventListener("click", function() {
+      audioPlayer.play();
+    });
+
+if(Math.floor(Math.random() * 10) < 7){
+  balloonGame();
+}else{
+  writeGame();
+}
+
+
+  function balloonGame(){
+    // Array of objects containing left position and animation delays for each snowflake
+    const snowflakesData = [
+      { position: "left", percentage: "1%", delay1: "0s", delay2: "0s" },
+      // { position: "left", percentage: "6%", delay1: "1s", delay2: "1s" },
+      { position: "left", percentage: "12%", delay1: "6s", delay2: "0.5s" },
+      // { position: "left", percentage: "18%", delay1: "4s", delay2: "2s" },
+      { position: "left", percentage: "24%", delay1: "2s", delay2: "2s" },
+      { position: "left", percentage: "28%", delay1: "8s", delay2: "3s" },
+      { position: "right", percentage: "24%", delay1: "6s", delay2: "2s" },
+      // { position: "right", percentage: "12%", delay1: "2s", delay2: "1s" },
+      { position: "right", percentage: "12%", delay1: "1s", delay2: "0s" },
+      { position: "right", percentage: "1%", delay1: "3s", delay2: "1s" },
+    ];
+    
+
+// Function to generate a random letter from A to Z
+function getRandomLetter() {
+  return String.fromCharCode(65 + Math.floor(Math.random() * 26));
+}
+
+
+
+// Generate falling snowflakes with custom positions and animation delays
+function generateSnowflakes() {
+  let chosenLetter = getRandomLetter();
+  const container = document.getElementById("gameContainer");
+  let hasChosenLetter = false;
+
+
+  function playAudio(chosenLetter) {
+    const audioSrc = `assets/audio/Waar is de ${chosenLetter}.mp3`;
+    audioPlayer.src = audioSrc;
+    audioPlayer.play();
+    message.innerHTML = `Waar is de *`;
+  }
+  playAudio(chosenLetter)
+  function getRandomStyles() {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    return { r, g, b };
+  }
+
+  snowflakesData.forEach(({ position, percentage, delay1, delay2 }) => {
+    const { r, g, b } = getRandomStyles();
+    const snowflake = document.createElement("div");
+    snowflake.classList.add("balloon");
+    
+    // Create a <span> element for the snowflake text content
+    const snowflakeText = document.createElement("span");
+    const randomLetter = getRandomLetter();
+    if(randomLetter==chosenLetter){
+      hasChosenLetter = true;
+      snowflake.classList.add("chosenLetter")
+    }
+    snowflakeText.textContent = randomLetter;
+    snowflakeText.style.color = `rgba(${r - 80},${g - 80},${b - 80},1)`;
+
+    // Append the <span> element to the snowflake container
+    snowflake.appendChild(snowflakeText);
+
+    // Apply styles to the snowflake
+    snowflake.style.backgroundColor = `rgba(${r},${g},${b},0.7)`;
+    snowflake.style.color = `rgba(${r},${g},${b},0.7)`;
+    snowflake.style.boxShadow = `inset -7px -3px 10px rgba(${r - 40},${g - 40},${b - 40},0.7)`;
+
+    // Set custom position and animation delay for each snowflake
+    if (position === "left") {
+        snowflake.style.left = percentage;
+    } else if (position === "right") {
+        snowflake.style.right = percentage;
+    }
+    snowflake.style.animationDelay = `${delay1}, ${delay2}`;
+
+    container.appendChild(snowflake);
+});
+
+
+  // If no chosen letter is present, randomly select a snowflake and change its text content to chosenletter
+  if (!hasChosenLetter) {
+    const snowflakes = document.getElementsByClassName("balloon");
+    const randomIndex = Math.floor(Math.random() * snowflakes.length);
+    chosenSnowFlake = snowflakes[randomIndex]
+    chosenSnowFlake.getElementsByTagName("span")[0].textContent = chosenLetter;
+    chosenSnowFlake.classList.add("newchosenLetter")
+    chosenSnowFlake.addEventListener('click', function() {
+            // Do something when clicked, for example:
+            showSuccessImage();
+        praiseAudio();
+            // You can replace the alert with any action you want to take
+        });
+
+  }
+  
+}
+
+// Call the function to generate snowflakes
+generateSnowflakes();
+  }
+  
+  function writeGame(){
+  // Select random key
+  const keys = Object.keys(numbersDict);
+  let randomKey
+  if (searchParams.get('key')){
+    randomKey = searchParams.get('key');
+  } else {
+    randomKey = keys[Math.floor(Math.random() * keys.length)];
+  }
+  if(randomKey.length > 1){
+    circleSize *= (1 + (0.05 * randomKey.length));
+    strokeWidth *= (1 + (0.05 * randomKey.length));
+    touchRadius *= (1 + (0.05 * randomKey.length))
+    patternSize *= (1 + (0.05 * randomKey.length))
+  }
+
+  function playAudio(currentKey) {
+    const audioSrc = `assets/audio/Schrijf de ${currentKey}.mp3`;
+    audioPlayer.src = audioSrc;
+    audioPlayer.play();
+    message.innerHTML = `Schrijf de ${currentKey}`;
+  }
+  
+ 
   
   function playPraise() {
     if (randomKey.length > 1) {
@@ -235,15 +390,14 @@ const message = document.getElementById("message");
   // Call playAudio with the first randomKey
   playAudio(randomKey[0]);
   
-  // Add event listener to play the audio on message click
-  message.addEventListener("click", function() {
-    audioPlayer.play();
-  });
+
   
   
+  const selectedAnimal = animalList[Math.floor(Math.random() * animalList.length)]
+  const patternImage = "assets/images/"+selectedAnimal+"-pattern.jpg";
 
   // define pattern
-  const defsDiv = svgContainer.append("div").style("height","0px").style("width","0px")
+  const defsDiv = gameContainer.append("div").style("height","0px").style("width","0px")
   const defs = defsDiv.append("svg").append("defs");
   const pattern = defs
     .append("pattern")
@@ -268,7 +422,7 @@ const lineList = [];
 const groupList = [];
 
 function drawPath(pathData, key) {
-  const newGroup = svgContainer.append("svg") // Create a new SVG element for each letter
+  const newGroup = gameContainer.append("svg") // Create a new SVG element for each letter
   // const transformValue = i*400
   .attr("id", "svgGroup"+key)
   .attr("class", "svg-group")
@@ -409,50 +563,7 @@ groupList.forEach(group => {
 
   
 
-  function pauseProgressbar() {
-    var element = document.getElementById("progressBar");
-    element.classList.add("paused");
-  }
-  const progressBarBox = document.getElementById("progressBarBox");
-  const flashProgressBar = () => {
-      progressBarBox.classList.add("flashAnimation");
-  };
-
-  function startProgressbar() {
-    if (progressbarStarted) {
-      return; // If progress bar has already started, exit the function
-    }
-    
-    progressbarStarted = true;
-    console.log("Start")
-    var element = document.getElementById("progressBar");
-    element.classList.remove("paused");
-    setTimeout(flashProgressBar, timerDuration * 1000 * 0.8);
-    setTimeout(endTimer, timerDuration*1000);
-    var progressBar = document.querySelector('.progressBar');
-    progressBar.style.animation = 'none';
-    void progressBar.offsetWidth;
-    progressBar.style.animation = null;
-
-  }
-  function endTimer(){
-    gameIsActive = false;
-    
-    
-  }
-
-  function gameEnd(){
-    overlay.style.display = "none"
-    if(gameIsActive){
-      initiateExercise();
-    } else {
-      progressbarStarted = false;
-    document.getElementById('actionMessage').classList.remove('hidden')
-    actionBox = document.getElementById("actionBox").classList.remove('hidden');
-    document.getElementById("mainDiv").classList.add('hidden');
-    progressBarBox.classList.remove("flashAnimation");
-  }
-}
+  
 
   function enableDragging() {
     draggingEnabled = true;
@@ -567,4 +678,5 @@ groupList.forEach(group => {
     }
   }
 
+}
 }

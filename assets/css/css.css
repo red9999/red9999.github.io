@@ -191,3 +191,69 @@ body {
     transform: scale(1);
   }
 }
+
+
+body {
+  margin: 0;
+}
+
+#gameContainer {
+  /* height: 100vh; */
+  box-sizing: border-box;
+  display: flex;
+  position:relative;
+  overflow: hidden;
+  transition: opacity 500ms;
+}
+ 
+.balloon {
+  top: 110%;
+  height: 125px;
+  width: 105px;
+  border-radius: 75% 75% 70% 70%;
+  position: absolute;
+  animation: float 3s infinite linear, shake 3s infinite ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.balloon span{
+  font-size: 4em;
+
+}
+
+.balloon:before {
+  content: "";
+  height: 75px;
+  width: 1px;
+  padding: 1px;
+  background-color: #FDFD96;
+  display: block;
+  position: absolute;
+  top: 125px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.balloon:after {
+    content: "▲";
+    text-align: center;
+    display: block;
+    position: absolute;
+    color: inherit;
+    top: 120px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+@keyframes float {
+  0% { top: 110%; }
+  100% { top: -10%; }
+}
+
+@keyframes shake {
+  /* 0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(40px); } */
+}
