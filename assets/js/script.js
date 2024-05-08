@@ -184,10 +184,10 @@ const message = document.getElementById("message");
     randomKey = keys[Math.floor(Math.random() * keys.length)];
   }
   if(randomKey.length > 1){
-    circleSize *= (1 + (0.1 * randomKey.length));
-    strokeWidth *= (1 + (0.1 * randomKey.length));
-    touchRadius *= (1 + (0.1 * randomKey.length))
-    patternSize *= (1 + (0.1 * randomKey.length))
+    circleSize *= (1 + (0.05 * randomKey.length));
+    strokeWidth *= (1 + (0.05 * randomKey.length));
+    touchRadius *= (1 + (0.05 * randomKey.length))
+    patternSize *= (1 + (0.05 * randomKey.length))
   }
 
  
@@ -518,7 +518,7 @@ groupList.forEach(group => {
 
 
   function closestPoint(pathNode, pathLength, point) {
-    var precision = 1,
+    var precision = 5,
       best,
       bestLength,
       bestDistance = Infinity;
