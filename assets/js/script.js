@@ -1,8 +1,10 @@
 console.clear();
 const searchParams = new URLSearchParams(window.location.search);
 const animalList = ["deer", "dog", "frog", "giraffe", "pig", "tiger", "zebra"]
-const circleSize = 200;
-const touchRadius = circleSize * 1.3;
+let circleSize = 20;
+let strokeWidth = 8;
+let touchRadius = circleSize * 1.5;
+let patternSize = 50
 
 const timerDuration = 60; // in seconds, also to be set in css
 
@@ -14,77 +16,75 @@ function openNav() {
 
 const numbersDict = {
   0: [
-    "M310 -632C162 -632 90 -479 90 -289C90 -97 162 48 311 48S532 -97 532 -289C532 -479 460 -632 312 -632",
+    "M31 -63.2C16.2 -63.2 9 -47.9 9 -28.9C9 -9.7 16.2 4.8 31.1 4.8S53.2 -9.7 53.2 -28.9C53.2 -47.9 46 -63.2 31.2 -63.2",
   ],
-  1: ["M70 151L284 0H288V670"],
+  1: ["M7 15.1L28.4 0H28.8V67"],
   2: [
-    "M0 178C13 42 86 0 174 0C361 0 440 42 440 151C440 258 364 337 288 421L65 666V670H465",
+    "M0 17.8C1.3 4.2 8.6 0 17.4 0C36.1 0 44 4.2 44 15.1C44 25.8 36.4 33.7 28.8 42.1L6.5 66.6V67H46.5",
   ],
   3: [
-    "M90 -531C119 -584 177 -632 273 -632C392 -632 446 -560 446 -478C446 -388 383 -311 249 -311L218 -311 L249 -311C400 -311 456 -216 456 -127C456 -25 381 49 263 49C166 49 94 -1 75 -75",
+    "M9 -53.1C11.9 -58.4 17.7 -63.2 27.3 -63.2C39.2 -63.2 44.6 -56 44.6 -47.8C44.6 -38.8 38.3 -31.1 24.9 -31.1L21.8 -31.1 L24.9 -31.1C40 -31.1 45.6 -21.6 45.6 -12.7C45.6 -2.5 38.1 4.9 26.3 4.9C16.6 4.9 9.4 -0.1 7.5 -7.5",
   ],
-  4: ["M 385,-622 L 65,-116 L 509,-112", "M 385,-622 L 385,48"],
+  4: ["M 38.5,-62.2 L 6.5,-11.6 L 50.9,-11.2", "M 38.5,-62.2 L 38.5,4.8"],
   5: [
-    "M137 -622L127 -328C169 -354 228 -367 274 -367C393 -367 467 -277 467 -160C467 -36 385 48 276 48C193 48 127 -1 95 -90",
-    "M137 -622 L449 -622",
+    "M13.7 -62.2L12.7 -32.8C16.9 -35.4 22.8 -36.7 27.4 -36.7C39.3 -36.7 46.7 -27.7 46.7 -16C46.7 -3.6 38.5 4.8 27.6 4.8C19.3 4.8 12.7 -0.1 9.5 -9",
+    "M13.7 -62.2 L44.9 -62.2",
   ],
   6: [
-    "M360 -632L201 -420C119 -311 90 -236 90 -157C90 -57 144 48 292 48C420 48 492 -36 492 -150C492 -276 401 -353 298 -353C229 -353 151 -320 105 -249",
+    "M36 -63.2L20.1 -42C11.9 -31.1 9 -23.6 9 -15.7C9 -5.7 14.4 4.8 29.2 4.8C42 4.8 49.2 -3.6 49.2 -15C49.2 -27.6 40.1 -35.3 29.8 -35.3C22.9 -35.3 15.1 -32 10.5 -24.9",
   ],
-  7: ["M40 -622L445 -622L445 -618L126 48"],
+  7: ["M4 -62.2L44.5 -62.2L44.5 -61.8L12.6 4.8"],
   8: [
-    "M-230 -632C-329 -632 -398 -570 -398 -489C-398 -305 -42 -322 -42 -114C-42 -9 -133 48 -230 48C-326 48 -421 -8 -421 -114C-421 -320 -64 -302 -64 -489C-64 -562 -118 -632 -228 -632",
+    "M-23 -63.2C-32.9 -63.2 -39.8 -57 -39.8 -48.9C-39.8 -30.5 -4.2 -32.2 -4.2 -11.4C-4.2 -0.9 -13.3 4.8 -23 4.8C-32.6 4.8 -42.1 -0.8 -42.1 -11.4C-42.1 -32 -6.4 -30.2 -6.4 -48.9C-6.4 -56.2 -11.8 -63.2 -22.8 -63.2",
   ],
   9: [
-    "M 477,-427  C477,-527 423,-632 275,-632 C 147,-632 75,-548 75,-434 C 75,-308 166,-231 269,-231 C 338,-231 416,-264 462,-335 C470 -354 477 -379 477 -427 C477 -348 448 -273 366 -164L207 48",
+    "M 47.7,-42.7  C47.7,-52.7 42.3,-63.2 27.5,-63.2 C 14.7,-63.2 7.5,-54.8 7.5,-43.4 C 7.5,-30.8 16.6,-23.1 26.9,-23.1 C 33.8,-23.1 41.6,-26.4 46.2,-33.5 C47 -35.4 47.7 -37.9 47.7 -42.7 C47.7 -34.8 44.8 -27.3 36.6 -16.4L20.7 4.8",
   ],
-  ///
-  A: ["M338 0L70 675", "M338 0L606,675", "M155 462L522 462"],
+  A: ["M33.8 0L7 67.5", "M33.8 0L60.6,67.5", "M15.5 46.2L52.2 46.2"],
   B: [
-    "M140,-15 L140,695",
-    "M140,10 L301,10C471,10 514,87 514,165C514,276 428,324 330,324L140,324 L310,324C469,324 534,392 534,496C534,595 475,670 302,670L140,670",
+    "M14,-1.5 L14,69.5",
+    "M14,1 L30.1,1C47.1,1 51.4,8.7 51.4,16.5C51.4,27.6 42.8,32.4 33,32.4L14,32.4 L31,32.4C46.9,32.4 53.4,39.2 53.4,49.6C53.4,59.5 47.5,67 30.2,67L14,67",
   ],
-  C: ["M566 -489C529 -583 460 -632 358 -632C187 -632 95 -496 95 -293C95 -69 208 48 358 48C475 48 552 -23 580 -105"],
-  D: ["M140 10L140 670",
-"M140 10L260 10C440 10 607 103 608 339C609 543 484 670 287 670L140 670"],
-E: ["M140 10L140 670",
-    "M140 10 L501 10",
-  "M140 356L484 356",
-  "M140 670L501 670"],
-  F: ["M140 10L140 670",
-      "M140 10 L501 10",
-  "M140 356L484 356",
+  C: ["M56.6 -48.9C52.9 -58.3 46 -63.2 35.8 -63.2C18.7 -63.2 9.5 -49.6 9.5 -29.3C9.5 -6.9 20.8 4.8 35.8 4.8C47.5 4.8 55.2 -2.3 58 -10.5"],
+  D: ["M14 1L14 67",
+    "M14 1L26 1C44 1 60.7 10.3 60.8 33.9C60.9 54.3 48.4 67 28.7 67L14 67"],
+  E: ["M14 1L14 67",
+    "M14 1 L50.1 1",
+  "M14 35.6L48.4 35.6",
+  "M14 67L50.1 67"],
+  F: ["M14 1L14 67",
+      "M14 1 L50.1 1",
+  "M14 35.6L48.4 35.6",
  ],
- G: ["M566 -489C529 -583 460 -632 358 -632C196 -632 95 -508 95 -292C95 -104 169 48 363 48C443 48 509 22 560 -9L560 -286L383 -286"],
- H: ["M140 0L140 680",
- "M140 365L566 365",
- "M566 0L566 680"],
-  I: ["M140 0v680"],
-  J: ["M231 -632L231 -90C231 13 185 48 128 48C103 48 73 41 50 19"],
-  K: ["M181 -632 L181 48",
- "M503 -632L191 -311L527 48"],
-L: ["M140 -632L140 38L458 38"],
-M: ["M140 48L140 -627L144 -627L429 18L433 18L718 -627L722 -627L722 48"],
-N: ["M140 48L140 -627L144 -627L596 43L600 43L599 -632"],
-O: ["M357 -632C168 -632 95 -453 95 -293C95 -159 147 48 358 48S621 -159 621 -293C621 -453 548 -632 359 -632"],
-P: ["M140 -622 L140 48", 
-"M140 -622L317 -622C458 -622 525 -546 525 -440C525 -331 454 -268 314 -268L140 -268"],
-Q: [
-"M357 -632C168 -632 95 -453 95 -293C95 -159 147 48 358 48S621 -159 621 -293C621 -453 548 -632 359 -632","M428 41 L599 186"],
-R: ["M140 -622L140 48",
-"M140 -622L313 -622C447 -622 506 -546 506 -459C506 -356 423 -296 325 -296L140 -296",
-"M343 -296L519 48"],
-S: ["M456 -542C432 -594 379 -632 293 -632C171 -632 109 -557 109 -478C109 -286 476 -316 476 -115C476 -26 404 48 285 48C193 48 123 5 95 -61"],
-T: ["M40 -622L480 -622",
-"M260 -622 L260 48"],
-U: ["M130 -632L130 -197C130 -39 218 48 347 48C482 48 564 -39 564 -197L564 -632 L564 48"],
-V: ["M70 -632L319 43L323 43L571 -632"],
-W: ["M80 -632L255 43L259 43L450 -622L454 -622L645 43L649 43L830 -632"],
-X: ["M70 0L516 680",
-"M537 0L93 680"],
-Y: ["M50 -632L285 -248L525 -632",
-"M285 -248L285 48"],
-Z: ["M110 -622L498 -622L498 -618L111 34L111 38L509 38"],
+ G: ["M56.6 -48.9C52.9 -58.3 46 -63.2 35.8 -63.2C19.6 -63.2 9.5 -50.8 9.5 -29.2C9.5 -10.4 16.9 4.8 36.3 4.8C44.3 4.8 50.9 2.2 56 -0.9L56 -28.6L38.3 -28.6"],
+ H: ["M14 0L14 68",
+ "M14 36.5L56.6 36.5",
+ "M56.6 0L56.6 68"],
+  I: ["M14 0v68"],
+  J: ["M23.1 -63.2L23.1 -9C23.1 1.3 18.5 4.8 12.8 4.8C10.3 4.8 7.3 4.1 5 1.9"],
+  K: ["M18.1 -63.2 L18.1 4.8",
+ "M50.3 -63.2L19.1 -31.1L52.7 4.8"],
+L: ["M14 -63.2L14 3.8L45.8 3.8"],
+M: ["M14 4.8L14 -62.7L14.4 -62.7L42.9 1.8L43.3 1.8L71.8 -62.7L72.2 -62.7L72.2 4.8"],
+N: ["M14 4.8L14 -62.7L14.4 -62.7L59.6 4.3L60 4.3L59.9 -63.2"],
+O: ["M35.7 -63.2C16.8 -63.2 9.5 -45.3 9.5 -29.3C9.5 -15.9 14.7 4.8 35.8 4.8S62.1 -15.9 62.1 -29.3C62.1 -45.3 54.8 -63.2 35.9 -63.2"],
+P: ["M14 -62.2 L14 4.8", 
+"M14 -62.2L31.7 -62.2C45.8 -62.2 52.5 -54.6 52.5 -44C52.5 -33.1 45.4 -26.8 31.4 -26.8L14 -26.8"],
+Q: ["M35.7 -63.2C16.8 -63.2 9.5 -45.3 9.5 -29.3C9.5 -15.9 14.7 4.8 35.8 4.8S62.1 -15.9 62.1 -29.3C62.1 -45.3 54.8 -63.2 35.9 -63.2","M42.8 4.1 L59.9 18.6"],
+R: ["M14 -62.2L14 4.8",
+"M14 -62.2L31.3 -62.2C44.7 -62.2 50.6 -54.6 50.6 -45.9C50.6 -35.6 42.3 -29.6 32.5 -29.6L14 -29.6",
+"M34.3 -29.6L51.9 4.8"],
+S: ["M45.6 -54.2C43.2 -59.4 37.9 -63.2 29.3 -63.2C17.1 -63.2 10.9 -55.7 10.9 -47.8C10.9 -28.6 47.6 -31.6 47.6 -11.5C47.6 -2.6 40.4 4.8 28.5 4.8C19.3 4.8 12.3 0.5 9.5 -6.1"],
+T: ["M4 -62.2L48 -62.2",
+"M26 -62.2 L26 4.8"],
+U: ["M13 -63.2L13 -19.7C13 -3.9 21.8 4.8 34.7 4.8C48.2 4.8 56.4 -3.9 56.4 -19.7L56.4 -63.2 L56.4 4.8"],
+V: ["M7 -63.2L31.9 4.3L32.3 4.3L57.1 -63.2"],
+W: ["M8 -63.2L25.5 4.3L25.9 4.3L45 -62.2L45.4 -62.2L64.5 4.3L64.9 4.3L83 -63.2"],
+X: ["M7 0L51.6 68",
+"M53.7 0L9.3 68"],
+Y: ["M5 -63.2L28.5 -24.8L52.5 -63.2",
+"M28.5 -24.8L28.5 4.8"],
+Z: ["M11 -62.2L49.8 -62.2L49.8 -61.8L11.1 3.4L11.1 3.8L50.9 3.8"],
 LIAM: "",
 LUCAS: "",
 PAPA: "",
@@ -149,7 +149,7 @@ function openFullscreen() {
 // Add event listener to the button
 startButton.addEventListener("click", function () {
   gameIsActive = true;
-  openFullscreen()
+  // openFullscreen()
   initiateExercise();
 });
 
@@ -183,6 +183,12 @@ const message = document.getElementById("message");
   } else {
     randomKey = keys[Math.floor(Math.random() * keys.length)];
   }
+  if(randomKey.length > 1){
+    circleSize *= (1 + (0.1 * randomKey.length));
+    strokeWidth *= (1 + (0.1 * randomKey.length));
+    touchRadius *= (1 + (0.1 * randomKey.length))
+    patternSize *= (1 + (0.1 * randomKey.length))
+  }
 
  
 
@@ -198,9 +204,6 @@ const message = document.getElementById("message");
     const successImage = successImages[Math.floor(Math.random() * successImages.length)];
     overlay.style.backgroundImage = `url('assets/images/success/${successImage}.png')`;
     overlay.style.display = "block";
-    // overlay.style.animationName = "scale-in";
-    // overlay.style.animationDuration = "1s";
-    // overlay.style.backgroundSize = "80%";
   }
   
   function praiseAudio() {
@@ -245,11 +248,13 @@ const message = document.getElementById("message");
   const pattern = defs
     .append("pattern")
     .attr("id", "pattern")
-    .attr("width", 200)
-    .attr("height", 200)
+    .attr("width", patternSize)
+    .attr("height", patternSize)
     .attr("patternUnits", "userSpaceOnUse");
 
-  pattern.append("image").attr("xlink:href", patternImage);
+  pattern.append("image").attr("xlink:href", patternImage)
+  .attr("width", patternSize)
+  .attr("height", patternSize);
 
 
 
@@ -278,7 +283,7 @@ function drawPath(pathData, key) {
       .attr("class", "shape")
       .attr("d", path)
       .attr("stroke", "")
-      .attr("stroke-width", "50")
+      .attr("stroke-width", strokeWidth)
       .attr("fill", "none");
 
     pathList.push(newPath);
@@ -290,7 +295,7 @@ function drawPath(pathData, key) {
       .attr("d", path)
       .attr("stroke", "url(#pattern)")
       // .attr("stroke", "#000")
-      .attr("stroke-width", "80")
+      .attr("stroke-width", strokeWidth)
       .style("display", "none");
 
     lineList.push(newLine);
@@ -303,7 +308,7 @@ function drawPath(pathData, key) {
 // Animate the drawing of the path
 function animatePath() {
   let cumulativeDuration = 0;
-  const animationSpeed = 3000; // Aanimation speed
+  const animationSpeed = 500; // Aanimation speed
   pathList.forEach((currentPath, i) => {
     const totalLength = currentPath.node().getTotalLength();
     const animationDuration = totalLength / animationSpeed;
@@ -330,21 +335,23 @@ for (let key = 0; key < randomKey.length; key++){
 }
 
 
-const groupWidthPercentage = 100 / groupList.length;
+// Calculate total width of all groups
 let totalWidth = 0;
-groupList.forEach((group, i) => {
-  totalWidth += group.node().getBBox().width + circleSize+10;
-})
+groupList.forEach(group => {
+  totalWidth += group.node().getBBox().width + circleSize + 10;
+});
 
-groupList.forEach((group, i) => {
-  groupBBox = group.node().getBBox();
-  group.attr(
-    "viewBox",
-    `${groupBBox.x - (circleSize / 2)} ${groupBBox.y - (circleSize / 2)} ${groupBBox.width + circleSize+10} ${groupBBox.height + circleSize+10
-    }`);
-  widthPercentage = ((groupBBox.width + circleSize+10) / totalWidth)*100
+// Adjust viewBox and width percentage for each group
+groupList.forEach(group => {
+  const groupBBox = group.node().getBBox();
+  const widthPercentage = ((groupBBox.width + circleSize + 10) / totalWidth) * 100;
+  const viewBoxX = groupBBox.x - (circleSize / 2);
+  const viewBoxWidth = groupBBox.width + circleSize + 10;
+  const viewBoxY = groupBBox.y - (circleSize / 2);
+  const viewBoxHeight = groupBBox.height + circleSize + 10;
+  group.attr("viewBox", `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`);
   group.style("max-width", `${widthPercentage}%`);
-})
+});
 
   //interaction
 
@@ -511,7 +518,7 @@ groupList.forEach((group, i) => {
 
 
   function closestPoint(pathNode, pathLength, point) {
-    var precision = 10,
+    var precision = 1,
       best,
       bestLength,
       bestDistance = Infinity;
@@ -520,8 +527,8 @@ groupList.forEach((group, i) => {
     var scanTo = lastLength + traveled;
 
 
-    if (traveled * 2 < 50) {
-      scanTo = scanFrom + 50;
+    if (traveled * 2 < 10) {
+      scanTo = scanFrom + 10;
     }
 
     if (scanTo > pathLength) {
