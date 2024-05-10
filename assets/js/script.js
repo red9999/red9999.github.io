@@ -103,12 +103,12 @@ AUTO: ""
 let alphanumList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
   "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 var praiseList = ["Goed gedaan!", "Fantastisch!", "Geweldig!", "Prima!", "Heel goed!", "Uitstekend!", "Knap hoor!", "Fantastisch gedaan!", "Wat goed zeg!", "Klasse!", "Goed bezig!", "Wat knap van je!"]
-
-
+const wordList = ["LIAM", "LUCAS", "PAPA", "MAMA", "OPA", "OMA", "APPEL", "STOEL",
+  "TAFEL", "TV", "WATER", "AUTO"]
 
 // Preload MP3 files
 function preloadAudio() {
-  const files = [];
+  const files = ["assets/audio/Waar is de.mp3", "assets/audio/Schrijf de.mp3"];
 
   // Add "Schrijf de [character]" MP3 files to the list
   alphanumList.forEach(character => {
@@ -125,7 +125,7 @@ function preloadAudio() {
   files.forEach(audioSrc => {
     const audio = new Audio(audioSrc);
     audio.preload = 'auto';
-    // document.body.appendChild(audio); // Optionally, you can append the audio element to the document body to trigger preloading
+    document.getElementById("audioElements").appendChild(audio);
   });
 }
 
@@ -247,21 +247,7 @@ if(Math.floor(Math.random() * 10) < 7){
 
 
   function balloonGame(){
-    // Array of objects containing left position and animation delays for each snowflake
-    const snowflakesData = [
-      { position: "left", percentage: "1%", delay1: "0s", delay2: "0s" },
-      // { position: "left", percentage: "6%", delay1: "1s", delay2: "1s" },
-      { position: "left", percentage: "12%", delay1: "2.5s", delay2: "0.5s" },
-      // { position: "left", percentage: "18%", delay1: "4s", delay2: "2s" },
-      { position: "left", percentage: "24%", delay1: "1.2s", delay2: "2s" },
-      { position: "left", percentage: "28%", delay1: "2.9s", delay2: "3s" },
-      { position: "right", percentage: "24%", delay1: "0.8s", delay2: "2s" },
-      // { position: "right", percentage: "12%", delay1: "2s", delay2: "1s" },
-      { position: "right", percentage: "12%", delay1: "2.5s", delay2: "0s" },
-      { position: "right", percentage: "1%", delay1: "0.4s", delay2: "1s" },
-    ];
-    
-
+  
 // Function to generate a random letter from A to Z
 function getRandomLetter() {
   return String.fromCharCode(65 + Math.floor(Math.random() * 26));
@@ -270,10 +256,12 @@ function getRandomLetter() {
 
 
 // Generate falling snowflakes with custom positions and animation delays
-function generateSnowflakes() {
+function generateBalloons() {
   let chosenLetter = getRandomLetter();
   const container = document.getElementById("gameContainer");
   let hasChosenLetter = false;
+  let chosenLettersList = [];
+  let allLettersList = [];
 
 
   function playAudio(chosenLetter) {
@@ -284,76 +272,95 @@ function generateSnowflakes() {
   }
   playAudio(chosenLetter)
   function getRandomStyles() {
-    const r = Math.floor(Math.random() * 255);
-    const g = Math.floor(Math.random() * 255);
-    const b = Math.floor(Math.random() * 255);
-    return { r, g, b };
+    const colors = [
+      "light-pink",
+      "pink",
+      "peach",
+      "yellow",
+      "lime-green",
+      "light-green",
+      "sky-blue",
+      "light-blue",
+      "lavender",
+      "light-purple",
+      "pastel-pink",
+      "cream",
+      "coral",
+      "rose",
+      "apricot",
+      "canary",
+      "chartreuse",
+      "mint",
+      "powder-blue",
+      "celeste"
+    ];
+
+    return colors[Math.floor(Math.random() * colors.length)];
   }
 
-  snowflakesData.forEach(({ position, percentage, delay1, delay2 }) => {
-    const { r, g, b } = getRandomStyles();
+  for (let i = 0; i < 7; i++) {
+    const randomStyle = getRandomStyles();
     const snowflake = document.createElement("div");
-    snowflake.classList.add("balloon");
+    snowflake.classList.add("balloon", "balloon-float", randomStyle);
     
     // Create a <span> element for the snowflake text content
     const snowflakeText = document.createElement("span");
     const randomLetter = getRandomLetter();
+    snowflakeText.textContent = randomLetter;
+    allLettersList.push(snowflake)
     if(randomLetter==chosenLetter){
       hasChosenLetter = true;
-      snowflake.classList.add("chosenLetter")
-      snowflake.addEventListener('click', function() {
-        // Do something when clicked, for example:
-        gameContainer.html('')
-        showSuccessImage();
-    praiseAudio();
-        // You can replace the alert with any action you want to take
-    });
-    }
-    snowflakeText.textContent = randomLetter;
-    snowflakeText.style.color = `rgba(${r - 80},${g - 80},${b - 80},1)`;
-
+      chosenLettersList.push(snowflake)
+    } 
+    
     // Append the <span> element to the snowflake container
     snowflake.appendChild(snowflakeText);
-
     // Apply styles to the snowflake
-    snowflake.style.backgroundColor = `rgba(${r},${g},${b},0.7)`;
-    snowflake.style.color = `rgba(${r},${g},${b},0.7)`;
-    snowflake.style.boxShadow = `inset -7px -3px 10px rgba(${r - 40},${g - 40},${b - 40},0.7)`;
-
-    // Set custom position and animation delay for each snowflake
-    if (position === "left") {
-        snowflake.style.left = percentage;
-    } else if (position === "right") {
-        snowflake.style.right = percentage;
-    }
-    snowflake.style.animationDelay = `${delay1}, ${delay2}`;
+    // snowflake.style.backgroundColor = `rgba(${r},${g},${b},0.7)`;
+    // snowflake.style.color = `rgba(${r},${g},${b},0.7)`;
+    // snowflake.style.boxShadow = `inset -7px -3px 10px rgba(${r - 40},${g - 40},${b - 40},0.7)`;
 
     container.appendChild(snowflake);
-});
+};
 
 
   // If no chosen letter is present, randomly select a snowflake and change its text content to chosenletter
   if (!hasChosenLetter) {
-    const snowflakes = document.getElementsByClassName("balloon");
-    const randomIndex = Math.floor(Math.random() * snowflakes.length);
-    chosenSnowFlake = snowflakes[randomIndex]
+    const randomIndex = Math.floor(Math.random() * allLettersList.length);
+    chosenSnowFlake = allLettersList[randomIndex]
     chosenSnowFlake.getElementsByTagName("span")[0].textContent = chosenLetter;
-    chosenSnowFlake.classList.add("newchosenLetter")
-    chosenSnowFlake.addEventListener('click', function() {
-            // Do something when clicked, for example:
-            gameContainer.html('')
-            showSuccessImage();
-        praiseAudio();
-            // You can replace the alert with any action you want to take
-        });
+  
 
+    chosenLettersList.push(chosenSnowFlake)
   }
+console.log(chosenLettersList)
+  chosenLettersList.forEach(letter => {
+    letter.classList.add("chosenLetter")
+    letter.addEventListener('click', function(){
+      console.log("win")
+      allLettersList.forEach(otherLetter => {
+        if(otherLetter != letter){
+        otherLetter.style.display = 'none';
+        }
+      });
+      letter.classList.add('balloon-win')
+      letter.classList.remove('balloon-float')
+      const audioSrc = `assets/audio/${chosenLetter}.mp3`;
+      audioPlayer.src = audioSrc;
+      audioPlayer.play();
+      audioPlayer.onended = function() {
+        letter.style.zIndex = '0'
+        showSuccessImage();
+        praiseAudio();
+      };
+    });
+  });
   
-  
+  console.log(chosenLetter)
 }
 
 // Call the function to generate snowflakes
-generateSnowflakes();
+generateBalloons();
   }
   
   function writeGame(){
@@ -379,7 +386,7 @@ generateSnowflakes();
     message.innerHTML = `Schrijf de ${currentKey}`;
   }
   
- 
+
   
   function playPraise() {
     if (randomKey.length > 1) {

@@ -207,15 +207,18 @@ body {
 }
  
 .balloon {
-  top: 110%;
   height: 125px;
   width: 105px;
   border-radius: 75% 75% 70% 70%;
   position: absolute;
-  animation: float 3s infinite linear, shake 3s infinite ease-in-out;
+  
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.balloon-float{
+  top: 120%;
+  animation: float 4s infinite ease-out, shake 3s infinite ease-in-out;
 }
 .balloon span{
   font-size: 4em;
@@ -261,3 +264,195 @@ body {
 .chosenLetter{
   z-index:9999;
 }
+
+
+.balloon-float:nth-child(1) {
+  position: absolute;
+  left: 1%;
+  animation-delay: 0s, 0s;
+}
+
+.balloon-float:nth-child(2) {
+  position: absolute;
+  left: 12%;
+  animation-delay: 2.5s, 0.5s;
+}
+
+.balloon-float:nth-child(3) {
+  position: absolute;
+  left: 24%;
+  animation-delay: 1.2s, 2s;
+}
+
+.balloon-float:nth-child(4) {
+  position: absolute;
+  left: 28%;
+  animation-delay: 2.9s, 3s;
+}
+
+.balloon-float:nth-child(5) {
+  position: absolute;
+  right: 24%;
+  animation-delay: 0.8s, 2s;
+}
+
+.balloon-float:nth-child(6) {
+  position: absolute;
+  right: 12%;
+  animation-delay: 2.5s, 0s;
+}
+
+.balloon-float:nth-child(7) {
+  position: absolute;
+  right: 1%;
+  animation-delay: 0.4s, 1s;
+}
+
+.balloon-win{
+  transform: scale(3);
+    transition: transform 1s ease 0s;
+
+}
+
+
+
+/* Light Pink */
+.light-pink {
+  background-color: rgba(255, 204, 204, 0.7);
+  color: rgba(175, 124, 124);
+  box-shadow: inset -7px -3px 10px rgba(215, 164, 164, 0.7);
+}
+
+/* Pink */
+.pink {
+  background-color: rgba(255, 153, 153, 0.7);
+  color: rgba(175, 73, 73);
+  box-shadow: inset -7px -3px 10px rgba(215, 113, 113, 0.7);
+}
+
+/* Peach */
+.peach {
+  background-color: rgba(255, 204, 153, 0.7);
+  color: rgba(175, 124, 73);
+  box-shadow: inset -7px -3px 10px rgba(215, 164, 113, 0.7);
+}
+
+/* Yellow */
+.yellow {
+  background-color: rgba(255, 255, 153, 0.7);
+  color: rgba(175, 175, 73);
+  box-shadow: inset -7px -3px 10px rgba(215, 215, 113, 0.7);
+}
+
+/* Lime Green */
+.lime-green {
+  background-color: rgba(204, 255, 153, 0.7);
+  color: rgba(124, 175, 73);
+  box-shadow: inset -7px -3px 10px rgba(164, 215, 113, 0.7);
+}
+
+/* Light Green */
+.light-green {
+  background-color: rgba(153, 255, 153, 0.7);
+  color: rgba(73, 175, 73);
+  box-shadow: inset -7px -3px 10px rgba(113, 215, 113, 0.7);
+}
+
+/* Sky Blue */
+.sky-blue {
+  background-color: rgba(153, 204, 255, 0.7);
+  color: rgba(73, 124, 175);
+  box-shadow: inset -7px -3px 10px rgba(113, 164, 215, 0.7);
+}
+
+/* Light Blue */
+.light-blue {
+  background-color: rgba(153, 204, 255, 0.7);
+  color: rgba(73, 124, 175);
+  box-shadow: inset -7px -3px 10px rgba(113, 164, 215, 0.7);
+}
+
+/* Lavender */
+.lavender {
+  background-color: rgba(204, 153, 255, 0.7);
+  color: rgba(124, 73, 175);
+  box-shadow: inset -7px -3px 10px rgba(164, 113, 215, 0.7);
+}
+
+/* Light Purple */
+.light-purple {
+  background-color: rgba(255, 153, 255, 0.7);
+  color: rgba(175, 73, 175);
+  box-shadow: inset -7px -3px 10px rgba(215, 113, 215, 0.7);
+}
+
+/* Pastel Pink */
+.pastel-pink {
+  background-color: rgba(255, 204, 255, 0.7);
+  color: rgba(175, 124, 175);
+  box-shadow: inset -7px -3px 10px rgba(215, 164, 215, 0.7);
+}
+
+/* Cream */
+.cream {
+  background-color: rgba(255, 204, 153, 0.7);
+  color: rgba(175, 124, 73);
+  box-shadow: inset -7px -3px 10px rgba(215, 164, 113, 0.7);
+}
+
+/* Coral */
+.coral {
+  background-color: rgba(255, 153, 153, 0.7);
+  color: rgba(175, 73, 73);
+  box-shadow: inset -7px -3px 10px rgba(215, 113, 113, 0.7);
+}
+
+/* Rose */
+.rose {
+  background-color: rgba(255, 204, 204, 0.7);
+  color: rgba(175, 124, 124);
+  box-shadow: inset -7px -3px 10px rgba(215, 164, 164, 0.7);
+}
+
+/* Apricot */
+.apricot {
+  background-color: rgba(255, 204, 153, 0.7);
+  color: rgba(175, 124, 73);
+  box-shadow: inset -7px -3px 10px rgba(215, 164, 113, 0.7);
+}
+
+/* Canary */
+.canary {
+  background-color: rgba(255, 255, 153, 0.7);
+  color: rgba(175, 175, 73);
+  box-shadow: inset -7px -3px 10px rgba(215, 215, 113, 0.7);
+}
+
+/* Chartreuse */
+.chartreuse {
+  background-color: rgba(204, 255, 153, 0.7);
+  color: rgba(124, 175, 73);
+  box-shadow: inset -7px -3px 10px rgba(164, 215, 113, 0.7);
+}
+
+/* Mint */
+.mint {
+  background-color: rgba(153, 255, 153, 0.7);
+  color: rgba(73, 175, 73);
+  box-shadow: inset -7px -3px 10px rgba(113, 215, 113, 0.7);
+}
+
+/* Powder Blue */
+.powder-blue {
+  background-color: rgba(153, 204, 255, 0.7);
+  color: rgba(73, 124, 175);
+  box-shadow: inset -7px -3px 10px rgba(113, 164, 215, 0.7);
+}
+
+/* Celeste */
+.celeste {
+  background-color: rgba(153, 204, 255, 0.7);
+  color: rgba(73, 124, 175);
+  box-shadow: inset -7px -3px 10px rgba(113, 164, 215, 0.7);
+}
+
