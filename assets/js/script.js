@@ -6,7 +6,7 @@ let strokeWidth = 8;
 let touchRadius = circleSize * 1.5;
 let patternSize = 50
 
-const timerDuration = 60; // in seconds, also to be set in css
+const timerDuration = 120; // in seconds, also to be set in css
 
 
 function openNav() {
@@ -149,7 +149,6 @@ function openFullscreen() {
 
 // Add event listener to the button
 startButton.addEventListener("click", function () {
-  gameIsActive = true;
   // openFullscreen()
   initiateExercise();
 });
@@ -186,7 +185,7 @@ const message = document.getElementById("message");
     if (progressbarStarted) {
       return; // If progress bar has already started, exit the function
     }
-    
+    gameIsActive = true;
     progressbarStarted = true;
     console.log("Start")
     var element = document.getElementById("progressBar");
@@ -252,7 +251,7 @@ if(Math.floor(Math.random() * 10) < 7){
 function getRandomLetter() {
   return String.fromCharCode(65 + Math.floor(Math.random() * 26));
 }
-
+startProgressbar();
 
 
 // Generate falling snowflakes with custom positions and animation delays
