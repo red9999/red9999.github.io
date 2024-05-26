@@ -149,7 +149,7 @@ function openFullscreen() {
 
 // Add event listener to the button
 startButton.addEventListener("click", function () {
-  // openFullscreen()
+  openFullscreen()
   initiateExercise();
 });
 
