@@ -133,25 +133,40 @@ function preloadAudio() {
 window.addEventListener('load', preloadAudio);
 
 
-var startButton = document.getElementById("startButton");
+
 
 function openFullscreen() {
-  elem = document.getElementById("gameDiv")
+  var elem = document.getElementById("gameDiv");
   if (elem.requestFullscreen) {
     elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) { /* Safari */
+  } else if (elem.webkitRequestFullscreen) { // Safari
     elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { /* IE11 */
+  } else if (elem.msRequestFullscreen) { // IE11
     elem.msRequestFullscreen();
+  } else if (elem.mozRequestFullScreen) { // Firefox
+    elem.mozRequestFullScreen();
+  }
+}
+
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) { // Safari
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) { // IE11
+    document.msExitFullscreen();
+  } else if (document.mozCancelFullScreen) { // Firefox
+    document.mozCancelFullScreen();
   }
 }
 
 
-// Add event listener to the button
+var startButton = document.getElementById("startButton");
 startButton.addEventListener("click", function () {
   openFullscreen()
   initiateExercise();
 });
+
 
 
 const overlay = document.getElementById("overlayImage")
@@ -216,6 +231,13 @@ const message = document.getElementById("message");
     progressBarBox.classList.remove("flashAnimation");
   }
 }
+var endButton = document.getElementById("endButton");
+endButton.addEventListener("click", function () {
+  closeFullscreen()
+  gameIsActive = false;
+  gameEnd();
+  // This should pause the game, then allow to resume or end.
+});
 
  function showSuccessImage() {
     const successImage = successImages[Math.floor(Math.random() * successImages.length)];

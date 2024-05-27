@@ -80,7 +80,7 @@ body {
 
 
 .viewbox {
-  height: calc(100dvh - 80px);
+  height: calc(100dvh - 130px);
   margin: 0 auto;
 }
 
@@ -456,3 +456,11 @@ body {
   box-shadow: inset -7px -3px 10px rgba(113, 164, 215, 0.7);
 }
 
+#endButton {
+  text-align: right; /* Aligns the content of the div to the right */
+  cursor: pointer;
+}
+
+#endButton img {
+  transform: rotate(180deg); /* Rotates the image 180 degrees */
+}
