@@ -401,7 +401,7 @@ function initiateExercise() {
     audioPlayer.play();
   });
   
-  if (lettersSeen.length > 0 && Math.floor(Math.random() * 10) < 6) {
+  if (lettersSeen.length > 0 && Math.floor(Math.random() * 10) < 8) {
     balloonGame();
   } else {
     writeGame();
