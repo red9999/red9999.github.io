@@ -309,9 +309,10 @@ body {
 }
 
 .balloon-win{
-  transform: scale(3);
+  transform: scale(5);
     transition: transform 1s ease 0s;
-
+    display: inline-flex;
+    top: 30%;
 }
 
 

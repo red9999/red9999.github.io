@@ -94,19 +94,94 @@ const numbersDict = {
   X: ["M7 0L51.6 68", "M53.7 0L9.3 68"],
   Y: ["M5 -63.2L28.5 -24.8L52.5 -63.2", "M28.5 -24.8L28.5 4.8"],
   Z: ["M11 -62.2L49.8 -62.2L49.8 -61.8L11.1 3.4L11.1 3.8L50.9 3.8"],
-  LIAM: "",
-  LUCAS: "",
-  PAPA: "",
-  MAMA: "",
-  OPA: "",
-  OMA: "",
-  APPEL: "",
-  STOEL: "",
-  TAFEL: "",
-  TV: "",
-  WATER: "",
-  AUTO: "",
 };
+
+const wordGroups = [
+  ["LIAM", "LUCAS", "AAN", "AAP", "ACHT", "ALLES"],
+  ["AUTO", "AVOND", "BAARD", "BABY", "BAK", "BALLON"],
+  ["BANAAN", "BEER", "BEEST", "BEKER", "BEL", "BOOM"],
+  ["BOOS", "BOOT", "BORD", "BOTER", "BRAND", "BRIL"],
+  ["BROER", "BROOD", "BRUIN", "BUIK", "BUS", "BUITEN"],
+  ["CHIPS", "CLOWN", "DAAR", "DAG", "DAK", "DEKEN"],
+  ["DIEF", "DICHT", "DEUR", "DAT", "DANSEN", "DOOS"],
+  ["DRIE", "DROOG", "NAT", "EEN", "TWEE", "VIER"],
+  ["VIJF", "ZES", "ZEVEN", "NEGEN", "TIEN", "EEND"],
+  ["EI", "EMMER", "ETEN", "EVEN", "FEEST", "FIETS"],
+  ["FLES", "FOTO", "FILM", "GAAN", "GANG", "GEEL"],
+  ["GEIT", "GEK", "GELD", "GIRAF", "GOED", "GRAP"],
+  ["GRAS", "GROEN", "HAAN", "HOI", "HALLO", "HEEL"],
+  ["TV", "HERT", "HOND", "HOOG", "HOUT", "HUILEN"],
+  ["HUIS", "IDEE", "IJSJE", "JA", "JARIG", "JUF"],
+  ["JONGEN", "MEISJE", "JAS", "KAARS", "KAAS", "KAM"],
+  ["KAMER", "KAMMEN", "KAPPER", "KAST", "KAT", "KEEL"],
+  ["KLIMMEN", "KNIE", "KOEKJE", "APPEL", "KOKEN", "KONING"],
+  ["KOP", "KUS", "LEKKER", "LEPEL", "LETTER", "LEREN"],
+  ["LEUK", "LEZEN", "LIEDJE", "LIGGEN", "LIEF", "LIKKEN"],
+  ["LIP", "LOS", "MAAN", "MAAR", "MAMA", "MAN"],
+  ["MELK", "MENS", "MES", "MOEDER", "MOL", "MORGEN"],
+  ["MUS", "NAAM", "NACHT", "SLAAP", "NEE", "NIET"],
+  ["OOK", "OOM", "OOR", "OMA", "OPA", "OVER"],
+  ["PAARD", "PAPA", "PATAT", "PEN", "PET", "PINDA"],
+  ["PLANT", "PLAS", "POEP", "POES", "POP", "ROOD"],
+  ["RENNEN", "RAAR", "RAAM", "SAMEN", "SAP", "SCHAAP"],
+  ["SCHAAR", "SCHEP", "SCHEUR", "SCHOON", "SLA", "SLAK"],
+  ["SLANG", "SLEE", "SLIM", "SNEL", "SOEP", "SPEL"],
+  ["KUIT", "KOUD", "TAFEL", "TAART", "TAS", "TAK"],
+  ["THEE", "TOCH", "TOT", "TRAM", "TREIN", "TRAP"],
+  ["UIL", "UUR", "VAAK", "VAAS", "VALLEN", "VIS"],
+  ["YOGHURT", "WAAR", "WANG", "WAT", "WC", "WATER"],
+  ["WOLK", "WOLF", "VOS", "WIT", "ZWART", "GRIJS"],
+  ["ORANJE", "PAARS", "ROZE", "VOGEL", "MUIS", "KIP"],
+  ["KOE", "RAT", "HAAS", "DUIF", "XYLOFOON"]
+];
+
+// smaller groups
+// wordGroups = [
+//   ["LIAM", "LUCAS"],
+//   ["AAN", "AAP", "ACHT", "ALLES", "AUTO"],
+//   ["AVOND", "BAARD", "BAKKEN", "BALLON", "BANAAN"],
+//   ["BEER", "BEEST", "BEKER", "BEL", "BOOM"],
+//   ["BOOS", "BOOT", "BORD", "BOTER", "BRAND"],
+//   ["BRIL", "BROER", "BROOD", "BRUIN", "BUIK"],
+//   ["BUS", "BUITEN", "CHIPS", "CLOWN", "DAAR"],
+//   ["DAG", "DAK", "DEKEN", "DIEF", "DICHT"],
+//   ["DEUR", "DAT", "DANSEN", "DOOS", "DRIE"],
+//   ["DROOG", "NAT", "EEN", "TWEE", "VIER"],
+//   ["VIJF", "ZEVEN", "NEGEN", "TIEN", "EEND"],
+//   ["EI", "EMMER", "ETEN", "EVEN", "FEEST"],
+//   ["FIETS", "FLES", "FOTO", "FILM", "GAAN"],
+//   ["GANG", "GEEL", "GEIT", "GEK", "GELD"],
+//   ["GIRAF", "GOED", "GRAP", "GRAS", "GROEN"],
+//   ["HAAN", "HOI", "HALLO", "HEEL", "TV"],
+//   ["HERT", "HOND", "HOOG", "HOUT", "HUILEN"],
+//   ["HUIS", "IDEE", "IJSJE", "JA", "JARIG"],
+//   ["JUF", "JONGEN", "MEISJE", "JAS", "KAARS"],
+//   ["KAAS", "KAM", "KAMER", "KAPPEN", "KAPPER"],
+//   ["KAST", "KAT", "KEEL", "KLIMMEN", "KNIE"],
+//   ["KOEKJE", "APPEL", "KOKEN", "KONING", "KOP"],
+//   ["KUS", "LEKKER", "LEPEL", "LETTER", "LEREN"],
+//   ["LEUK", "LEZEN", "LIEDJE", "LIGGEN", "LIEF"],
+//   ["LIKKEN", "LIP", "LOS", "MAAN", "MAAR"],
+//   ["MAMA", "MAN", "MELK", "MENS", "MES"],
+//   ["MOEDER", "MOL", "MORGEN", "MUS", "NAAM"],
+//   ["NACHT", "SLAAP", "NEE", "NIET", "OOK"],
+//   ["OOM", "OOR", "OMA", "OPA", "OVER"],
+//   ["PAARD", "PAPA", "PATAT", "PEN", "PET"],
+//   ["PINDA", "PLANT", "PLAS", "POEP", "POES"],
+//   ["POP", "ROOD", "RENNEN", "RAAR", "RAAM"],
+//   ["SAMEN", "SAP", "SCHAAP", "SCHAAR", "SCHEP"],
+//   ["SCHEUR", "SCHOON", "SLA", "SLAK", "SLANG"],
+//   ["SLEE", "SLIM", "SNEL", "SOEP", "SPEL"],
+//   ["KUIT", "KOUD", "TAFEL", "TAART", "TAS"],
+//   ["TAK", "THEE", "TOCH", "TOT", "TRAM"],
+//   ["TREIN", "TRAP", "UIL", "UUR", "VAAK"],
+//   ["VAAS", "VALLEN", "VIS", "YOGHURT", "WAAR"],
+//   ["WANG", "WAT", "WC", "WATER", "WOLK"],
+//   ["WOLF", "VOS", "WIT", "ZWART", "GRIJS"],
+//   ["ORANJE", "PAARS", "ROZE", "VOGEL", "MUIS"],
+//   ["KIP", "KOE", "RAT", "HAAS", "DUIF"],
+//   ["XYLOFOON"]
+// ];
 
 let alphanumList = [
   "A",
@@ -159,20 +234,6 @@ var praiseList = [
   "Klasse!",
   "Goed bezig!",
   "Wat knap van je!",
-];
-const wordList = [
-  "LIAM",
-  "LUCAS",
-  "PAPA",
-  "MAMA",
-  "OPA",
-  "OMA",
-  "APPEL",
-  "STOEL",
-  "TAFEL",
-  "TV",
-  "WATER",
-  "AUTO",
 ];
 
 // Preload MP3 files
@@ -253,6 +314,10 @@ let gameIsActive = false;
 let progressbarStarted = false;
 
 function initiateExercise() {
+  const selectedGroup = wordGroups[Math.floor(Math.random() * wordGroups.length)];
+  const lettersFromGroup = Array.from(selectedGroup.reduce((set, word) => new Set([...set, ...word]), new Set()));
+  let lettersSeen = [];
+
   const audioPlayer = document.getElementById("audioPlayer");
   const message = document.getElementById("message");
   audioPlayer.onended = null;
@@ -335,23 +400,19 @@ function initiateExercise() {
   message.addEventListener("click", function () {
     audioPlayer.play();
   });
-
-  if (Math.floor(Math.random() * 10) < 7) {
+  
+  if (lettersSeen.length > 0 && Math.floor(Math.random() * 10) < 6) {
     balloonGame();
   } else {
     writeGame();
   }
 
   function balloonGame() {
-    // Function to generate a random letter from A to Z
-    function getRandomLetter() {
-      return String.fromCharCode(65 + Math.floor(Math.random() * 26));
-    }
     startProgressbar();
 
     // Generate falling snowflakes with custom positions and animation delays
     function generateBalloons() {
-      let chosenLetter = getRandomLetter();
+      let chosenLetter = lettersSeen[Math.floor(Math.random() * lettersSeen.length)];
       const container = document.getElementById("gameContainer");
       let hasChosenLetter = false;
       let chosenLettersList = [];
@@ -361,7 +422,7 @@ function initiateExercise() {
         const audioSrc = `assets/audio/Waar is de ${chosenLetter}.mp3`;
         audioPlayer.src = audioSrc;
         audioPlayer.play();
-        message.innerHTML = "Waar is de *";
+        message.innerHTML = `Waar is de ${chosenLetter}?`;
       }
       playAudio(chosenLetter);
       function getRandomStyles() {
@@ -408,11 +469,6 @@ function initiateExercise() {
 
         // Append the <span> element to the snowflake container
         snowflake.appendChild(snowflakeText);
-        // Apply styles to the snowflake
-        // snowflake.style.backgroundColor = `rgba(${r},${g},${b},0.7)`;
-        // snowflake.style.color = `rgba(${r},${g},${b},0.7)`;
-        // snowflake.style.boxShadow = `inset -7px -3px 10px rgba(${r - 40},${g - 40},${b - 40},0.7)`;
-
         container.appendChild(snowflake);
       }
 
@@ -457,12 +513,14 @@ function initiateExercise() {
 
   function writeGame() {
     // Select random key
-    const keys = Object.keys(numbersDict);
+    
     let randomKey;
     if (searchParams.get("key")) {
       randomKey = searchParams.get("key");
     } else {
-      randomKey = keys[Math.floor(Math.random() * keys.length)];
+      const keys = Object.keys(selectedGroup);
+      console.log(selectedGroup)
+      randomKey = selectedGroup[Math.floor(Math.random() * selectedGroup.length)];
     }
     if (randomKey.length > 1) {
       circleSize *= 1 + 0.05 * randomKey.length;
@@ -483,7 +541,16 @@ function initiateExercise() {
         const audioSrc = `assets/audio/${randomKey}.mp3`;
         audioPlayer.src = audioSrc;
         audioPlayer.play();
+        // Handle error event
+        audioPlayer.onerror = function() {
+          console.error('Error loading audio:', audioSrc);
+          // Trigger onended functionality
+          showSuccessImage();
+          praiseAudio();
+        };
+
         audioPlayer.onended = function () {
+          // Triggered when audio playback ends successfully
           showSuccessImage();
           praiseAudio();
         };
@@ -610,8 +677,10 @@ function initiateExercise() {
 
     for (let key = 0; key < randomKey.length; key++) {
       const currentKey = randomKey[key];
-
+      console.log(randomKey)
+      console.log(currentKey)
       pathData = numbersDict[currentKey];
+      console.log(pathData)
       drawPath(pathData, key);
       animatePath();
     }

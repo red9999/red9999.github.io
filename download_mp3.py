@@ -39,4 +39,4 @@ for string in string_list:
         output_format="mp3_22050_32"
     )
 
-    save(audio, f"output/Schrijf de {string}.mp3")
+    save(audio, f"output/{string}.mp3")
