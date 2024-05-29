@@ -361,7 +361,7 @@ function initiateExercise() {
         const audioSrc = `assets/audio/Waar is de ${chosenLetter}.mp3`;
         audioPlayer.src = audioSrc;
         audioPlayer.play();
-        message.innerHTML = "Waar is de *";
+        message.innerHTML = `Waar is de ${chosenLetter}?`;
       }
       playAudio(chosenLetter);
       function getRandomStyles() {
@@ -408,11 +408,6 @@ function initiateExercise() {
 
         // Append the <span> element to the snowflake container
         snowflake.appendChild(snowflakeText);
-        // Apply styles to the snowflake
-        // snowflake.style.backgroundColor = `rgba(${r},${g},${b},0.7)`;
-        // snowflake.style.color = `rgba(${r},${g},${b},0.7)`;
-        // snowflake.style.boxShadow = `inset -7px -3px 10px rgba(${r - 40},${g - 40},${b - 40},0.7)`;
-
         container.appendChild(snowflake);
       }
 
