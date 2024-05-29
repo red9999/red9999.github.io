@@ -1,10 +1,7 @@
 console.clear();
 const searchParams = new URLSearchParams(window.location.search);
 const animalList = ["deer", "dog", "frog", "giraffe", "pig", "tiger", "zebra"];
-let circleSize = 20;
-let strokeWidth = 8;
-let touchRadius = circleSize * 1.5;
-let patternSize = 50;
+
 
 const timerDuration = 120; // in seconds, also to be set in css
 
@@ -513,7 +510,10 @@ function initiateExercise() {
 
   function writeGame() {
     // Select random key
-    
+    let circleSize = 20;
+let strokeWidth = 8;
+let touchRadius = circleSize * 1.5;
+let patternSize = 50;
     let randomKey;
     if (searchParams.get("key")) {
       randomKey = searchParams.get("key");
