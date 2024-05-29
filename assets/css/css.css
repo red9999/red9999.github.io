@@ -464,3 +464,19 @@ body {
 #endButton img {
   transform: rotate(180deg); /* Rotates the image 180 degrees */
 }
+
+.shapeLine{
+  display: none;
+  z-index: 99;
+}
+.shapeLine.active{
+  display: block;
+  stroke-dasharray: 5;
+  animation: dashAnimate 25s linear;
+}
+
+@keyframes dashAnimate {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
