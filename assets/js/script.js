@@ -316,10 +316,15 @@ const successImages = [
 let gameIsActive = false;
 let progressbarStarted = false;
 
+const gameContainer = d3.select("#gameContainer");
+const audioPlayer = document.getElementById("audioPlayer");
+const message = document.getElementById("message");
+
 function initiateExercise(level) {
   const selectedGroup = wordGroups[Math.floor(Math.random() * wordGroups.length)];
   const lettersFromGroup = Array.from(selectedGroup.reduce((set, word) => new Set([...set, ...word]), new Set()));
-  
+
+
   if(level=="easy"){
     var allOptions = lettersFromGroup;
   }else if(level=="hard"){
@@ -327,9 +332,7 @@ function initiateExercise(level) {
   }
   console.log(allOptions)
   let lettersSeen = new Set();
-  const gameContainer = d3.select("#gameContainer");
-  const audioPlayer = document.getElementById("audioPlayer");
-  const message = document.getElementById("message");
+
   
 
 
@@ -561,6 +564,8 @@ let patternSize = 50;
       if (randomKey.length > 1) {
         const audioSrc = `assets/audio/${randomKey}.mp3`;
         audioPlayer.src = audioSrc;
+        audioPlayer.play();
+        console.log("here")
         // Handle error event
         audioPlayer.onerror = function() {
           console.error('Error loading audio:', audioSrc);
@@ -570,6 +575,7 @@ let patternSize = 50;
         };
 
         audioPlayer.onended = function () {
+          console.log("There")
           // Triggered when audio playback ends successfully
           showSuccessImage();
           praiseAudio();
