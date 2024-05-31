@@ -326,12 +326,11 @@ function initiateExercise(level) {
 
 
   if(level=="easy"){
-    var allOptions = lettersFromGroup;
+    var allOptions = [].concat(...Array(5).fill(lettersFromGroup));
   }else if(level=="hard"){
-    var allOptions = [...selectedGroup, ...lettersFromGroup]
+    var allOptions = [].concat(...Array(5).fill([...selectedGroup, ...lettersFromGroup]));
   }
-  console.log(allOptions)
-  let lettersSeen = new Set();
+  let lettersSeen = [];
 
   
 
@@ -370,7 +369,6 @@ function initiateExercise(level) {
   function gameEnd() {
     
     if (gameIsActive) {
-      console.log("gameisactive")
       selectGame();
     } else {
       progressbarStarted = false;
@@ -416,14 +414,13 @@ function initiateExercise(level) {
   message.addEventListener("click", function () {
     audioPlayer.play();
   });
-  console.log(lettersSeen.size)
 
   function selectGame(){
     audioPlayer.onended = null;
     overlay.style.display = "none";
 
   gameContainer.html("");
-  if (lettersSeen.size > 0 && Math.floor(Math.random() * 10) < 6) {
+  if (lettersSeen.length > 0 && Math.floor(Math.random() * 10) < 7) {
     balloonGame();
   } else {
     writeGame();
@@ -436,7 +433,11 @@ selectGame();
 
     // Generate falling snowflakes with custom positions and animation delays
     function generateBalloons() {
-      let chosenLetter = [...lettersSeen][Math.floor(Math.random() * lettersSeen.size)];
+      let chosenLetter = lettersSeen[Math.floor(Math.random() * lettersSeen.length)];
+      console.log("seen before splice:" + lettersSeen)
+      lettersSeen.length > 1 ? lettersSeen.splice(lettersSeen.indexOf(chosenLetter), 1) : lettersSeen = [];
+      console.log("chosen letter:" + chosenLetter)
+      console.log("lettersSeen: " +lettersSeen)
       const container = document.getElementById("gameContainer");
       let hasChosenLetter = false;
       let chosenLettersList = [];
@@ -543,9 +544,11 @@ let patternSize = 50;
     } else {
       randomKey = allOptions[Math.floor(Math.random() * allOptions.length)];
       [...randomKey].forEach(letter => {
-        lettersSeen.add(letter);
+        lettersSeen.push(letter);
+        lettersSeen.push(letter);
+        allOptions.length > 1 ? allOptions.splice(allOptions.indexOf(letter), 1) : allOptions = [];
+
     });
-      console.log(lettersSeen)
     }
     if (randomKey.length > 1) {
       circleSize *= 1 + 0.05 * randomKey.length;
@@ -565,7 +568,6 @@ let patternSize = 50;
         const audioSrc = `assets/audio/${randomKey}.mp3`;
         audioPlayer.src = audioSrc;
         audioPlayer.play();
-        console.log("here")
         // Handle error event
         audioPlayer.onerror = function() {
           console.error('Error loading audio:', audioSrc);
@@ -575,7 +577,6 @@ let patternSize = 50;
         };
 
         audioPlayer.onended = function () {
-          console.log("There")
           // Triggered when audio playback ends successfully
           showSuccessImage();
           praiseAudio();
