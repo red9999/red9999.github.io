@@ -290,10 +290,16 @@ function closeFullscreen() {
   }
 }
 
-var startButton = document.getElementById("startButton");
-startButton.addEventListener("click", function () {
+var startEasy = document.getElementById("startEasy");
+startEasy.addEventListener("click", function () {
   openFullscreen();
-  initiateExercise();
+  initiateExercise("easy");
+});
+
+var startHard = document.getElementById("startHard");
+startHard.addEventListener("click", function () {
+  openFullscreen();
+  initiateExercise("hard");
 });
 
 const overlay = document.getElementById("overlayImage");
@@ -310,17 +316,23 @@ const successImages = [
 let gameIsActive = false;
 let progressbarStarted = false;
 
-function initiateExercise() {
+function initiateExercise(level) {
   const selectedGroup = wordGroups[Math.floor(Math.random() * wordGroups.length)];
   const lettersFromGroup = Array.from(selectedGroup.reduce((set, word) => new Set([...set, ...word]), new Set()));
-  let lettersSeen = [];
-
+  
+  if(level=="easy"){
+    var allOptions = lettersFromGroup;
+  }else if(level=="hard"){
+    var allOptions = [...selectedGroup, ...lettersFromGroup]
+  }
+  console.log(allOptions)
+  let lettersSeen = new Set();
+  const gameContainer = d3.select("#gameContainer");
   const audioPlayer = document.getElementById("audioPlayer");
   const message = document.getElementById("message");
-  audioPlayer.onended = null;
+  
 
-  const gameContainer = d3.select("#gameContainer");
-  gameContainer.html("");
+
   document.getElementById("actionBox").classList.add("hidden");
   document.getElementById("mainDiv").classList.remove("hidden");
 
@@ -339,7 +351,6 @@ function initiateExercise() {
     }
     gameIsActive = true;
     progressbarStarted = true;
-    console.log("Start");
     var element = document.getElementById("progressBar");
     element.classList.remove("paused");
     setTimeout(flashProgressBar, timerDuration * 1000 * 0.8);
@@ -354,9 +365,10 @@ function initiateExercise() {
   }
 
   function gameEnd() {
-    overlay.style.display = "none";
+    
     if (gameIsActive) {
-      initiateExercise();
+      console.log("gameisactive")
+      selectGame();
     } else {
       progressbarStarted = false;
       document.getElementById("actionMessage").classList.remove("hidden");
@@ -389,6 +401,10 @@ function initiateExercise() {
     const audioSrc = `assets/audio/${selectedString}.mp3`;
     audioPlayer.src = audioSrc;
     audioPlayer.play();
+    audioPlayer.onerror = function() {
+      console.error('Error loading audio:', audioSrc);
+      gameEnd();
+    };
     audioPlayer.onended = function () {
       setTimeout(gameEnd, 1000);
     };
@@ -397,19 +413,27 @@ function initiateExercise() {
   message.addEventListener("click", function () {
     audioPlayer.play();
   });
-  
-  if (lettersSeen.length > 0 && Math.floor(Math.random() * 10) < 8) {
+  console.log(lettersSeen.size)
+
+  function selectGame(){
+    audioPlayer.onended = null;
+    overlay.style.display = "none";
+
+  gameContainer.html("");
+  if (lettersSeen.size > 0 && Math.floor(Math.random() * 10) < 6) {
     balloonGame();
   } else {
     writeGame();
   }
+}
+selectGame();
 
   function balloonGame() {
     startProgressbar();
 
     // Generate falling snowflakes with custom positions and animation delays
     function generateBalloons() {
-      let chosenLetter = lettersSeen[Math.floor(Math.random() * lettersSeen.length)];
+      let chosenLetter = [...lettersSeen][Math.floor(Math.random() * lettersSeen.size)];
       const container = document.getElementById("gameContainer");
       let hasChosenLetter = false;
       let chosenLettersList = [];
@@ -456,7 +480,7 @@ function initiateExercise() {
 
         // Create a <span> element for the snowflake text content
         const snowflakeText = document.createElement("span");
-        const randomLetter = getRandomLetter();
+        const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
         snowflakeText.textContent = randomLetter;
         allLettersList.push(snowflake);
         if (randomLetter == chosenLetter) {
@@ -478,11 +502,9 @@ function initiateExercise() {
 
         chosenLettersList.push(chosenSnowFlake);
       }
-      console.log(chosenLettersList);
       chosenLettersList.forEach((letter) => {
         letter.classList.add("chosenLetter");
         letter.addEventListener("click", function () {
-          console.log("win");
           allLettersList.forEach((otherLetter) => {
             if (otherLetter != letter) {
               otherLetter.style.display = "none";
@@ -500,8 +522,6 @@ function initiateExercise() {
           };
         });
       });
-
-      console.log(chosenLetter);
     }
 
     // Call the function to generate snowflakes
@@ -518,9 +538,11 @@ let patternSize = 50;
     if (searchParams.get("key")) {
       randomKey = searchParams.get("key");
     } else {
-      const keys = Object.keys(selectedGroup);
-      console.log(selectedGroup)
-      randomKey = selectedGroup[Math.floor(Math.random() * selectedGroup.length)];
+      randomKey = allOptions[Math.floor(Math.random() * allOptions.length)];
+      [...randomKey].forEach(letter => {
+        lettersSeen.add(letter);
+    });
+      console.log(lettersSeen)
     }
     if (randomKey.length > 1) {
       circleSize *= 1 + 0.05 * randomKey.length;
@@ -528,7 +550,6 @@ let patternSize = 50;
       touchRadius *= 1 + 0.05 * randomKey.length;
       patternSize *= 1 + 0.05 * randomKey.length;
     }
-
     function playAudio(currentKey) {
       const audioSrc = `assets/audio/Schrijf de ${currentKey}.mp3`;
       audioPlayer.src = audioSrc;
@@ -540,7 +561,6 @@ let patternSize = 50;
       if (randomKey.length > 1) {
         const audioSrc = `assets/audio/${randomKey}.mp3`;
         audioPlayer.src = audioSrc;
-        audioPlayer.play();
         // Handle error event
         audioPlayer.onerror = function() {
           console.error('Error loading audio:', audioSrc);
@@ -677,10 +697,7 @@ let patternSize = 50;
 
     for (let key = 0; key < randomKey.length; key++) {
       const currentKey = randomKey[key];
-      console.log(randomKey)
-      console.log(currentKey)
       pathData = numbersDict[currentKey];
-      console.log(pathData)
       drawPath(pathData, key);
       animatePath();
     }
@@ -795,7 +812,6 @@ let patternSize = 50;
         point.y < touchBox.minY ||
         point.y > touchBox.maxY
       ) {
-        console.log("disabledrag");
         disableDragging();
         return;
       }

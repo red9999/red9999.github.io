@@ -63,7 +63,7 @@ body {
 }
 
 #actionMessage{
-  font-size: 5em;
+  font-size: 4em;
     color: #f27457;
 }
 
@@ -95,7 +95,8 @@ body {
   height: 95vh;
 }
 
-#startButton {
+
+.startButton {
   display: inline-block;
   background-color: #f2d785;
   padding: 15px 40px;
@@ -111,12 +112,12 @@ body {
   transition: all 100ms linear;
 }
 
-#startButton:hover {
+.startButton:hover {
   transform: translateY(-4px);
   box-shadow: 0 7px 0 #f27457;
 }
 
-#startButton:focus {
+.startButton:focus {
   outline: 0;
 }
 
